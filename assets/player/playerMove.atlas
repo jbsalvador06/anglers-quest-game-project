@@ -1,0 +1,11 @@
+playerMove.png
+size:32,256
+repeat:none
+down-still
+bounds:2,104,16,32
+left-still
+bounds:2,2,14,32
+right-still
+bounds:2,36,14,32
+up-still
+bounds:2,70,16,32

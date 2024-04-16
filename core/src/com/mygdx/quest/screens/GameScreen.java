@@ -1,6 +1,7 @@
 package com.mygdx.quest.screens;
 
 import java.util.Map;
+import java.util.Random;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,6 +29,8 @@ import com.mygdx.quest.utils.TileMapHelper;
 import de.eskalon.commons.screen.ManagedScreenAdapter;
 
 public class GameScreen extends ManagedScreenAdapter {
+
+    private String[] fish = {"Red Snapper", "Clownfish", "Blue Tang", "Salmon", "Trout", "Catfish", "Pike", "Bass", "Perch", "Tuna", "Swordfish", "Marlin", "Sturgeon", "Walleye", "Muskellunge", "Northern Pike", "Striped Bass", "Crappie", "Bluefin Tuna", "Wahoo", "Mahi Mahi"};
 
     private final AnglersQuest game;
     private Assets assets;
@@ -60,7 +63,7 @@ public class GameScreen extends ManagedScreenAdapter {
 
     @Override
     public void show() {
-        System.out.println("Game Screen");
+        System.out.println("Game Screen \n");
 
         world = new World(new Vector2(0, 0), false);
         box2dDebugRenderer = new Box2DDebugRenderer();
@@ -70,28 +73,30 @@ public class GameScreen extends ManagedScreenAdapter {
 
         shapeRenderer = new ShapeRenderer();
 
-        // Table mainTable = new Table();
-        // mainTable.setFillParent(true);
-
         Map<String, Fish> fishes = FishParser.parseFishJson("core/src/com/mygdx/quest/utils/fish.json");
 
-        player.addItem(fishes.get("Salmon"));
-        player.addItem(fishes.get("Catfish"));
-        player.addItem(fishes.get("Bluefin Tuna"));
-        player.addItem(fishes.get("Pike"));
-        player.addItem(fishes.get("Salmon"));
-        player.addItem(fishes.get("Red Snapper"));
-        player.addItem(fishes.get("Trout"));
-        player.addItem(fishes.get("Salmon"));
-        player.addItem(fishes.get("Sturgeon"));
-        player.addItem(fishes.get("Mahi Mahi"));
-        player.addItem(fishes.get("Sturgeon"));
+        // player.addItem(fishes.get("Salmon"));
+        // player.addItem(fishes.get("Crappie"));
+        // player.addItem(fishes.get("Bluefin Tuna"));
+        // player.addItem(fishes.get("Striped Bass"));
+        // player.addItem(fishes.get("Salmon"));
+        // player.addItem(fishes.get("Red Snapper"));
+        // player.addItem(fishes.get("Trout"));
+        // player.addItem(fishes.get("Salmon"));
+        // player.addItem(fishes.get("Sturgeon"));
+        // player.addItem(fishes.get("Mahi Mahi"));
+        // player.addItem(fishes.get("Sturgeon"));
+
+        Random rand = new Random();
+
+        for (int i = 0; i < 5 ; i++) {
+            player.addItem(fishes.get(fish[rand.nextInt(21)]));
+        }
 
         // Before sorting
         System.out.println("Before sorting:");
-        System.out.println("Name  |Location  |Rarity");
         for (Fish fish : player.getInventory()) {
-            System.out.println(fish.getName() + " " + fish.getLocation() + " " + fish.getRarity() + " " + fish.getWeight());
+            System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight());
         }
 
         System.out.println("");
@@ -99,9 +104,8 @@ public class GameScreen extends ManagedScreenAdapter {
         // After sorting
         player.sortInventory();
         System.out.println("After sorting:");
-        System.out.println("Name  |Location  |Rarity");
         for (Fish fish : player.getInventory()) {
-            System.out.println(fish.getName() + " " + fish.getLocation() + " " + fish.getRarity() + " " + fish.getWeight());
+            System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight());
         }
 
     }
@@ -194,10 +198,11 @@ public class GameScreen extends ManagedScreenAdapter {
     public void dispose() {
         mapRenderer.dispose();
         stage.dispose();
-        batch.dispose();
+        // batch.dispose();
         box2dDebugRenderer.dispose();
         world.dispose();
         shapeRenderer.dispose();
+        
     }
 
 }

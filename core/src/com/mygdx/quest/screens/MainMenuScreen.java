@@ -120,7 +120,7 @@ public class MainMenuScreen extends ManagedScreenAdapter {
             .width(game.widthScreen / 8)
             .height(game.heightScreen / 8)
             .pad(10);
-        mainTable.debugAll();
+        // mainTable.debugAll();
 
         stage.addActor(mainTable);
     }

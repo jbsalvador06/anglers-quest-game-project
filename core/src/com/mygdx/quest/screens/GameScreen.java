@@ -3,6 +3,7 @@ package com.mygdx.quest.screens;
 import java.util.Map;
 import java.util.Random;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +18,10 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
@@ -24,6 +29,7 @@ import com.mygdx.quest.utils.Assets;
 import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
 import com.mygdx.quest.utils.FishParser;
+import com.mygdx.quest.utils.Inventory;
 import com.mygdx.quest.utils.TileMapHelper;
 
 import de.eskalon.commons.screen.ManagedScreenAdapter;
@@ -31,6 +37,9 @@ import de.eskalon.commons.screen.ManagedScreenAdapter;
 public class GameScreen extends ManagedScreenAdapter {
 
     private String[] fish = {"Red Snapper", "Clownfish", "Blue Tang", "Salmon", "Trout", "Catfish", "Pike", "Bass", "Perch", "Tuna", "Swordfish", "Marlin", "Sturgeon", "Walleye", "Muskellunge", "Northern Pike", "Striped Bass", "Crappie", "Bluefin Tuna", "Wahoo", "Mahi Mahi"};
+
+    private Inventory inventory;
+    private Table mainTable;
 
     private final AnglersQuest game;
     private Assets assets;
@@ -50,13 +59,25 @@ public class GameScreen extends ManagedScreenAdapter {
     Circle playerCircle;
     Rectangle testRectangle;
 
+    private Skin skin;
+
     public GameScreen(final AnglersQuest game) {
         this.game = game;
         this.assets = game.assets;
+        this.skin = new Skin(Gdx.files.internal("assets/skins/quest-skin.json"));
         this.batch = new SpriteBatch();
         this.mapRenderer = new OrthogonalTiledMapRenderer(assets.getAssetManager().get(Assets.MAP));
         this.camera = game.camera;
         camera.setToOrtho(false, game.widthScreen / 2, game.heightScreen / 2);
+
+        assets.loadSkin();
+        assets.getAssetManager().finishLoading();
+
+        this.mainTable = new Table();
+        mainTable.setFillParent(true);
+        mainTable.center();
+        
+        this.inventory = new Inventory();
 
         this.stage = game.stage;
     }
@@ -64,6 +85,7 @@ public class GameScreen extends ManagedScreenAdapter {
     @Override
     public void show() {
         System.out.println("Game Screen \n");
+        System.out.println(skin);
 
         world = new World(new Vector2(0, 0), false);
         box2dDebugRenderer = new Box2DDebugRenderer();
@@ -94,6 +116,9 @@ public class GameScreen extends ManagedScreenAdapter {
         }
 
         // Before sorting
+        inventory.setInventory(player.getInventory());
+        inventory.displayInventory(skin, mainTable);
+
         System.out.println("Before sorting:");
         for (Fish fish : player.getInventory()) {
             System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight());
@@ -108,6 +133,10 @@ public class GameScreen extends ManagedScreenAdapter {
             System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight());
         }
 
+        stage.addActor(mainTable);
+
+        Label label = new Label("Test", skin);
+        stage.addActor(label);
     }
 
     @Override
@@ -202,7 +231,8 @@ public class GameScreen extends ManagedScreenAdapter {
         box2dDebugRenderer.dispose();
         world.dispose();
         shapeRenderer.dispose();
-        
+        assets.dispose();
+        skin.dispose();
     }
 
 }

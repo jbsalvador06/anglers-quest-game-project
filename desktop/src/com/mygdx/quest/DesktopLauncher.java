@@ -10,6 +10,7 @@ public class DesktopLauncher {
 
 		config.setTitle("Angler's Quest");
 		config.setWindowedMode(1280, 720);
+		config.setResizable(false);
 		config.setForegroundFPS(60);
 		config.useVsync(true);
 		

@@ -5,8 +5,10 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.quest.AnglersQuest;
+import com.mygdx.quest.utils.Assets;
 
 import de.eskalon.commons.screen.ManagedScreenAdapter;
 
@@ -27,6 +29,9 @@ public class LoadingScreen extends ManagedScreenAdapter {
 
     @Override
     public void show() {
+        Label label = new Label("Loading...", game.assets.getAssetManager().get(Assets.SKIN));
+        label.setPosition(game.widthScreen/2, game.heightScreen/2);
+        stage.addActor(label);
         queueAssets();
     }
 

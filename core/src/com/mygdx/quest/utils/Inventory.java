@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 public class Inventory {
 
@@ -22,13 +21,19 @@ public class Inventory {
 
     public void displayInventory(Skin skin, Table mainTable) {
         
+        int count = 0;
+
         for (Fish fish : inventory) {
             Label fishNames = new Label(fish.getName(), skin);
+            fishNames.setFontScale(0.5f);
             mainTable.add(fishNames).pad(5);
+            count++;
+
+            if (count % 3 == 0) {
+                mainTable.row();
+            }
         }
-
-        mainTable.add(new TextButton("Hello world", skin));
-
+        
     }
 
 }

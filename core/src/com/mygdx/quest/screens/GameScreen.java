@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -22,9 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.utils.Assets;
+import com.mygdx.quest.utils.CameraHandler;
 import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
 import com.mygdx.quest.utils.FishParser;
@@ -35,6 +38,7 @@ import de.eskalon.commons.screen.ManagedScreenAdapter;
 
 public class GameScreen extends ManagedScreenAdapter {
 
+    // Temporary array for random generation
     private String[] fish = {"Red Snapper", "Clownfish", "Blue Tang", "Salmon", "Trout", "Catfish", "Pike", "Bass", "Perch", "Tuna", "Swordfish", "Marlin", "Sturgeon", "Walleye", "Muskellunge", "Northern Pike", "Striped Bass", "Crappie", "Bluefin Tuna", "Wahoo", "Mahi Mahi"};
 
     private Inventory inventory;
@@ -59,22 +63,28 @@ public class GameScreen extends ManagedScreenAdapter {
     Rectangle testRectangle;
 
     private Skin skin;
+    private Stage uiStage;
 
     public GameScreen(final AnglersQuest game) {
         this.game = game;
         this.assets = game.assets;
-        this.skin = new Skin(Gdx.files.internal("assets/skins/quest-skin.json"));
+        // this.skin = new Skin(Gdx.files.internal("assets/skins/quest-skin.json"));
+        this.skin = assets.getAssetManager().get(Assets.SKIN);
         this.batch = new SpriteBatch();
         this.mapRenderer = new OrthogonalTiledMapRenderer(assets.getAssetManager().get(Assets.MAP));
         this.camera = game.camera;
         camera.setToOrtho(false, game.widthScreen / 2, game.heightScreen / 2);
+
+        this.uiStage = new Stage(new FitViewport(camera.viewportWidth, camera.viewportHeight));
 
         assets.loadSkin();
         assets.getAssetManager().finishLoading();
 
         this.mainTable = new Table();
         mainTable.setFillParent(true);
-        mainTable.center();
+        mainTable.left();
+        mainTable.top();
+        // mainTable.setPosition(camera.viewportWidth, camera.viewportHeight);
         
         this.inventory = new Inventory();
 
@@ -86,6 +96,8 @@ public class GameScreen extends ManagedScreenAdapter {
         System.out.println("Game Screen \n");
         System.out.println(skin);
 
+        Gdx.input.setInputProcessor(uiStage);
+
         world = new World(new Vector2(0, 0), false);
         box2dDebugRenderer = new Box2DDebugRenderer();
 
@@ -96,18 +108,6 @@ public class GameScreen extends ManagedScreenAdapter {
 
         Map<String, Fish> fishes = FishParser.parseFishJson("core/src/com/mygdx/quest/utils/fish.json");
 
-        // player.addItem(fishes.get("Salmon"));
-        // player.addItem(fishes.get("Crappie"));
-        // player.addItem(fishes.get("Bluefin Tuna"));
-        // player.addItem(fishes.get("Striped Bass"));
-        // player.addItem(fishes.get("Salmon"));
-        // player.addItem(fishes.get("Red Snapper"));
-        // player.addItem(fishes.get("Trout"));
-        // player.addItem(fishes.get("Salmon"));
-        // player.addItem(fishes.get("Sturgeon"));
-        // player.addItem(fishes.get("Mahi Mahi"));
-        // player.addItem(fishes.get("Sturgeon"));
-
         Random rand = new Random();
 
         for (int i = 0; i < 5 ; i++) {
@@ -115,6 +115,10 @@ public class GameScreen extends ManagedScreenAdapter {
         }
 
         // Before sorting
+        Label inventoryLabel = new Label("Inventory:", skin);
+        inventoryLabel.setFontScale(0.7f);
+        mainTable.add(inventoryLabel).colspan(3).center();
+        mainTable.row();
         inventory.setInventory(player.getInventory());
         inventory.displayInventory(skin, mainTable);
 
@@ -132,10 +136,9 @@ public class GameScreen extends ManagedScreenAdapter {
             System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight());
         }
 
-        stage.addActor(mainTable);
-
-        Label label = new Label("Test", skin);
-        stage.addActor(label);
+        uiStage.addActor(mainTable);
+        mainTable.setColor(Color.GRAY);
+        mainTable.debugAll();
     }
 
     @Override
@@ -146,10 +149,14 @@ public class GameScreen extends ManagedScreenAdapter {
 
         mapRenderer.render();
 
-        stage.act();
+        stage.act(delta);
         stage.draw();
 
+        uiStage.act(delta);
+        uiStage.draw();
+
         batch.begin();
+        batch.setProjectionMatrix(camera.combined);
         player.render(batch);
         batch.end();
 
@@ -179,7 +186,7 @@ public class GameScreen extends ManagedScreenAdapter {
             System.out.println("Collision detected!");
         }
         
-        batch.setProjectionMatrix(camera.combined);
+        
         mapRenderer.setView(camera);
         player.update();
     }
@@ -199,15 +206,8 @@ public class GameScreen extends ManagedScreenAdapter {
     }
 
     private void cameraUpdate(float delta) {
-        Vector3 position = camera.position;
-
-
-        position.x = Math.round(player.getBody().getPosition().x * Constants.PPM * 10) / 10f;
-        position.y = Math.round(player.getBody().getPosition().y * Constants.PPM * 10) / 10f;
-
-        camera.position.set(position);
-        camera.update();
         camera.zoom = Constants.zoom;
+        CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
     }
 
     private boolean checkForCollision(Circle circle, Rectangle rectangle) {
@@ -226,7 +226,6 @@ public class GameScreen extends ManagedScreenAdapter {
     public void dispose() {
         mapRenderer.dispose();
         stage.dispose();
-        // batch.dispose();
         box2dDebugRenderer.dispose();
         world.dispose();
         shapeRenderer.dispose();

@@ -1,37 +1,38 @@
 package com.mygdx.quest.screens;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.quest.AnglersQuest;
-import com.mygdx.quest.utils.Assets;
 
 import de.eskalon.commons.screen.ManagedScreenAdapter;
 
 public class LoadingScreen extends ManagedScreenAdapter {
     
     private final AnglersQuest game;
+    private AssetManager assetManager;
     private ShapeRenderer shapeRenderer;
     private float progress;
     
     private Stage stage;
+    private ExtendViewport viewport;
 
     public LoadingScreen(final AnglersQuest game) {
         this.game = game;
+        this.assetManager = game.assets.getAssetManager();
         this.shapeRenderer = new ShapeRenderer();
         this.progress = 0f;
-        this.stage = game.stage;
+        this.viewport = new ExtendViewport(game.widthScreen, game.heightScreen);
+        this.stage = new Stage(viewport);
     }
 
     @Override
     public void show() {
-        Label label = new Label("Loading...", game.assets.getAssetManager().get(Assets.SKIN));
-        label.setPosition(game.widthScreen/2, game.heightScreen/2);
-        stage.addActor(label);
         queueAssets();
     }
 
@@ -41,10 +42,10 @@ public class LoadingScreen extends ManagedScreenAdapter {
     }
 
     private void update(float delta) {
-        progress = MathUtils.lerp(progress, game.assets.getAssetManager().getProgress(), .1f);
-        System.out.println(progress + " " + game.assets.getAssetManager().getProgress());
+        progress = MathUtils.lerp(progress, assetManager.getProgress(), .1f);
+        System.out.println(progress + " " + assetManager.getProgress());
 
-        if (game.assets.getAssetManager().update() && progress > game.assets.getAssetManager().getProgress() - 0.001f) {
+        if (assetManager.update() && progress > assetManager.getProgress() - 0.001f) {
             game.getScreenManager().pushScreen(new GameScreen(game), null);
         }
     }
@@ -54,6 +55,7 @@ public class LoadingScreen extends ManagedScreenAdapter {
         ScreenUtils.clear(Color.valueOf("#80b782"));
 
         update(delta);
+        viewport.apply();
 
         stage.act();
         stage.draw();
@@ -70,12 +72,12 @@ public class LoadingScreen extends ManagedScreenAdapter {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        game.widthScreen = width;
-        game.heightScreen = height;
+        viewport.update(width, height);
     }
 
     @Override
     public void dispose() {
         shapeRenderer.dispose();
+        stage.dispose();
     }
 }

@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.quest.AnglersQuest;
-import com.mygdx.quest.utils.Assets;
 import com.rafaskoberg.gdx.typinglabel.TypingLabel;
 
 import de.eskalon.commons.screen.ManagedScreenAdapter;
@@ -31,10 +31,10 @@ public class MainMenuScreen extends ManagedScreenAdapter {
 
     public MainMenuScreen(final AnglersQuest game) {
         this.game = game;
-        this.skin = game.assets.getAssetManager().get(Assets.SKIN);
+        this.skin = game.assets.getSkin();
 
-        this.camera = game.camera;
-        this.viewport = game.viewport;
+        this.camera = new OrthographicCamera();
+        this.viewport = new ExtendViewport(game.widthScreen, game.heightScreen, camera);
         viewport.apply();
 
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
@@ -42,7 +42,7 @@ public class MainMenuScreen extends ManagedScreenAdapter {
 
         this.image = new Image(new Texture(Gdx.files.internal("anglers-quest-header.png")));
 
-        stage = game.stage;
+        this.stage = new Stage(viewport);
     }
 
     @Override
@@ -135,15 +135,15 @@ public class MainMenuScreen extends ManagedScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height);
-        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        camera.update();
+        // viewport.update(width, height);
+        // camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        // camera.update();
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void dispose() {
         stage.dispose();
-        // skin.dispose();
     }
 
 }

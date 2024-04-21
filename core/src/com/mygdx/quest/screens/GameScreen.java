@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -18,10 +17,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.quest.AnglersQuest;
@@ -65,14 +68,16 @@ public class GameScreen extends ManagedScreenAdapter {
     private Skin skin;
     private Stage uiStage;
 
+    private boolean inventoryOpen = false;
+    private TextButton openInventoryButton;
+
     public GameScreen(final AnglersQuest game) {
         this.game = game;
         this.assets = game.assets;
-        // this.skin = new Skin(Gdx.files.internal("assets/skins/quest-skin.json"));
         this.skin = assets.getAssetManager().get(Assets.SKIN);
         this.batch = new SpriteBatch();
-        this.mapRenderer = new OrthogonalTiledMapRenderer(assets.getAssetManager().get(Assets.MAP));
-        this.camera = game.camera;
+        this.mapRenderer = new OrthogonalTiledMapRenderer(assets.getMap());
+        this.camera = new OrthographicCamera();
         camera.setToOrtho(false, game.widthScreen / 2, game.heightScreen / 2);
 
         this.uiStage = new Stage(new FitViewport(camera.viewportWidth, camera.viewportHeight));
@@ -84,11 +89,10 @@ public class GameScreen extends ManagedScreenAdapter {
         mainTable.setFillParent(true);
         mainTable.left();
         mainTable.top();
-        // mainTable.setPosition(camera.viewportWidth, camera.viewportHeight);
         
         this.inventory = new Inventory();
 
-        this.stage = game.stage;
+        this.stage = new Stage();
     }
 
     @Override
@@ -114,7 +118,7 @@ public class GameScreen extends ManagedScreenAdapter {
             player.addItem(fishes.get(fish[rand.nextInt(21)]));
         }
 
-        // Before sorting
+        // With UI
         Label inventoryLabel = new Label("Inventory:", skin);
         inventoryLabel.setFontScale(0.7f);
         mainTable.add(inventoryLabel).colspan(3).center();
@@ -135,7 +139,7 @@ public class GameScreen extends ManagedScreenAdapter {
         for (Fish fish : player.getInventory()) {
             System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight());
         }
-
+        
         uiStage.addActor(mainTable);
         mainTable.setColor(Color.GRAY);
         mainTable.debugAll();
@@ -207,7 +211,8 @@ public class GameScreen extends ManagedScreenAdapter {
 
     private void cameraUpdate(float delta) {
         camera.zoom = Constants.zoom;
-        CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
+        // CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
+        CameraHandler.freeRoam(camera, player.getBody().getPosition().scl(Constants.PPM));
     }
 
     private boolean checkForCollision(Circle circle, Rectangle rectangle) {

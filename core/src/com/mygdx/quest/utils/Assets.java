@@ -35,6 +35,18 @@ public class Assets {
         assetManager.load(PLAYER_TILESET);
     }
 
+    public Skin getSkin() {
+        return assetManager.get(SKIN);
+    }
+
+    public TiledMap getMap() {
+        return assetManager.get(MAP);
+    }
+
+    public TextureAtlas getPlayerTileset() {
+        return assetManager.get(PLAYER_TILESET);
+    }
+
     public AssetManager getAssetManager() {
         return assetManager;
     }

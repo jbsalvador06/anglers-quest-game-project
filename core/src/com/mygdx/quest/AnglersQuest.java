@@ -1,10 +1,8 @@
 package com.mygdx.quest;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
-import com.mygdx.quest.screens.MainMenuScreen;
 import com.mygdx.quest.screens.SplashScreen;
 import com.mygdx.quest.utils.Assets;
 

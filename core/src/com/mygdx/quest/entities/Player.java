@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.quest.AnglersQuest;
-import com.mygdx.quest.utils.Assets;
 import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
 import com.mygdx.quest.utils.ItemSort;

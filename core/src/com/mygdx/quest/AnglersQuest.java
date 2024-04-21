@@ -1,13 +1,18 @@
 package com.mygdx.quest;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Interpolation;
 import com.mygdx.quest.screens.MainMenuScreen;
+import com.mygdx.quest.screens.SplashScreen;
 import com.mygdx.quest.utils.Assets;
 
 import de.eskalon.commons.core.ManagedGame;
 import de.eskalon.commons.screen.ManagedScreen;
 import de.eskalon.commons.screen.transition.ScreenTransition;
+import de.eskalon.commons.screen.transition.SlidingTransition;
+import de.eskalon.commons.screen.transition.impl.SlidingDirection;
 
 
 public class AnglersQuest extends ManagedGame<ManagedScreen, ScreenTransition> {
@@ -16,6 +21,7 @@ public class AnglersQuest extends ManagedGame<ManagedScreen, ScreenTransition> {
     public Assets assets;
 
     private SpriteBatch batch;
+    public Object getScreenManager;
 	
 	@Override
     public final void create() {
@@ -32,7 +38,7 @@ public class AnglersQuest extends ManagedGame<ManagedScreen, ScreenTransition> {
         assets.getAssetManager().finishLoading();
 
         this.screenManager.setAutoDispose(true, true);
-        this.screenManager.pushScreen(new MainMenuScreen(this), null);
+        this.screenManager.pushScreen(new SplashScreen(this), new SlidingTransition(batch, SlidingDirection.DOWN, false, 2.5f, Interpolation.bounceOut));
     }
 
     @Override

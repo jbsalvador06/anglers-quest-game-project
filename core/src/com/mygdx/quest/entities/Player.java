@@ -56,7 +56,7 @@ public class Player extends GameEntity{
         this.speed = 2.5f;
         game.assets.loadPlayer();
         game.assets.getAssetManager().finishLoading();
-        this.atlas = game.assets.getAssetManager().get(Assets.PLAYER_TILESET);
+        this.atlas = game.assets.getPlayerTileset();
         this.upStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("up-still"));
         this.downStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("down-still"));
         this.leftStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("left-still"));

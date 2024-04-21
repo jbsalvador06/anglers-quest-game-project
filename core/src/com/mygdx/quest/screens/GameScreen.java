@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
@@ -68,9 +69,6 @@ public class GameScreen extends ManagedScreenAdapter {
     private Skin skin;
     private Stage uiStage;
 
-    private boolean inventoryOpen = false;
-    private TextButton openInventoryButton;
-
     public GameScreen(final AnglersQuest game) {
         this.game = game;
         this.assets = game.assets;
@@ -92,7 +90,7 @@ public class GameScreen extends ManagedScreenAdapter {
         
         this.inventory = new Inventory();
 
-        this.stage = new Stage();
+        this.stage = new Stage(new ExtendViewport(game.widthScreen, game.heightScreen, camera));
     }
 
     @Override

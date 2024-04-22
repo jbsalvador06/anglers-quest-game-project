@@ -17,10 +17,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -32,6 +35,7 @@ import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
 import com.mygdx.quest.utils.FishParser;
 import com.mygdx.quest.utils.Inventory;
+import com.mygdx.quest.utils.Shop;
 import com.mygdx.quest.utils.TileMapHelper;
 
 import de.eskalon.commons.screen.ManagedScreenAdapter;
@@ -65,6 +69,8 @@ public class GameScreen extends ManagedScreenAdapter {
     private Skin skin;
     private Stage uiStage;
 
+    private Shop shop;
+
     public GameScreen(final AnglersQuest game) {
         this.game = game;
         this.assets = game.assets;
@@ -75,17 +81,17 @@ public class GameScreen extends ManagedScreenAdapter {
         camera.setToOrtho(false, game.widthScreen / 2, game.heightScreen / 2);
 
         this.uiStage = new Stage(new FitViewport(camera.viewportWidth, camera.viewportHeight));
-
+  
         assets.loadSkin();
         assets.getAssetManager().finishLoading();
-
+        
         this.mainTable = new Table();
         mainTable.setFillParent(true);
         mainTable.left();
         mainTable.top();
         
         this.inventory = new Inventory();
-
+        
         this.stage = new Stage(new ExtendViewport(game.widthScreen, game.heightScreen, camera));
     }
 
@@ -101,6 +107,7 @@ public class GameScreen extends ManagedScreenAdapter {
 
         tileMapHelper = new TileMapHelper(this, game);
         mapRenderer = tileMapHelper.setupMap();
+        this.shop = new Shop(player.getInventory());
 
         shapeRenderer = new ShapeRenderer();
 
@@ -137,6 +144,22 @@ public class GameScreen extends ManagedScreenAdapter {
         uiStage.addActor(mainTable);
         mainTable.setColor(Color.GRAY);
         mainTable.debugAll();
+
+        TextButton shopButton = new TextButton("Shop", skin);
+
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                openShop();
+            }
+        });
+
+        mainTable.add(shopButton);
+    }
+
+    private void openShop() {
+        shop.sellFish();
+        shop.buyUpgrades();
     }
 
     @Override
@@ -170,7 +193,7 @@ public class GameScreen extends ManagedScreenAdapter {
 
     private void update(float delta) {
         world.step(1 / 60f, 6, 2);
-        cameraUpdate(delta);s
+        cameraUpdate(delta);
 
         Vector3 projectedPosition = camera.project(new Vector3(player.getBody().getPosition().x * Constants.PPM, player.getBody().getPosition().y * Constants.PPM, 0));
 

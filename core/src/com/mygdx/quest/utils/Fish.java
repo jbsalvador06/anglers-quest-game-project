@@ -14,12 +14,13 @@ public class Fish {
         LEGENDARY
     }
 
-    public Fish(String name, String description, String location, Rarity rarity, float weight) {
+    public Fish(String name, String description, String location, Rarity rarity, float weight, int price) {
         this.name = name;
         this.description = description;
         this.location = location;
         this.rarity = rarity;
         this.weight = weight;
+        this.price = price;
     }
 
     public String getName() {

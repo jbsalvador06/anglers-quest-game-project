@@ -27,6 +27,7 @@ public class Player extends GameEntity{
     private float minX, maxX, minY, maxY;
 
     private ArrayList<Fish> inventory;
+    private int coins;
 
     public enum Direction {
         UP,
@@ -173,6 +174,14 @@ public class Player extends GameEntity{
     
     public void sortInventory() {
         inventory = ItemSort.sort(inventory);
+    }
+
+    public int getCoins() {
+        return coins;
+    }
+
+    public void setCoins(int coins) {
+        this.coins += coins;
     }
 
 }

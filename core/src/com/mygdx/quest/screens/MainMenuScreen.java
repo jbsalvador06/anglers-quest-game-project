@@ -128,6 +128,7 @@ public class MainMenuScreen extends ManagedScreenAdapter {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.valueOf("#80b782"));
+        viewport.apply();
 
         stage.act();
         stage.draw();
@@ -138,7 +139,9 @@ public class MainMenuScreen extends ManagedScreenAdapter {
         // viewport.update(width, height);
         // camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
         // camera.update();
-        stage.getViewport().update(width, height, true);
+        viewport.update(width, height, true);
+        game.widthScreen = width;
+        game.heightScreen = height;
     }
 
     @Override

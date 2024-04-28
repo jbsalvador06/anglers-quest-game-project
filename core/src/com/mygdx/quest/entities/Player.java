@@ -25,6 +25,8 @@ public class Player extends GameEntity{
     private Direction lastDirection = Direction.DOWN;
 
     private float minX, maxX, minY, maxY;
+    private float x;
+    private float y;
 
     private ArrayList<Fish> inventory;
     private int coins;
@@ -37,23 +39,12 @@ public class Player extends GameEntity{
     }
 
     public Player(float width, float height, Body body, final AnglersQuest game) {
-        /*
-         * The PLAYER needs to have the following:
-         * POSITION
-         * DIRECTION
-         * SPEED
-         * RADIUS
-         * UPGRADES
-         * 
-         * SPRITE
-         * SOUND
-         */
         super(width, height, body);
 
         this.game = game;
         inventory = new ArrayList<>();
 
-        this.speed = 2.5f;
+        this.speed = 4f;
         game.assets.loadPlayer();
         game.assets.getAssetManager().finishLoading();
         this.atlas = game.assets.getPlayerTileset();
@@ -66,8 +57,8 @@ public class Player extends GameEntity{
 
     @Override
     public void update() {
-        x = body.getPosition().x * Constants.PPM;
-        y = body.getPosition().y * Constants.PPM;
+        x = body.getPosition().x * Constants.PPM - width / 2;
+        y = body.getPosition().y * Constants.PPM - height / 2;
         elapsedTime += Gdx.graphics.getDeltaTime();
 
         boolean isMoving = (velX != 0 || velY != 0);
@@ -111,7 +102,7 @@ public class Player extends GameEntity{
                 currentFrame = downStill.getKeyFrame(0, true);
         }
         // batch.draw(currentFrame, x, y);
-        batch.draw(currentFrame, this.getBody().getPosition().x * Constants.PPM - (currentFrame.getRegionWidth() / 2), this.getBody().getPosition().y * Constants.PPM - (currentFrame.getRegionHeight() - 28 / 2));
+        batch.draw(currentFrame, this.getBody().getPosition().x * Constants.PPM - (currentFrame.getRegionWidth() / 2), this.getBody().getPosition().y * Constants.PPM - (currentFrame.getRegionHeight() / 5));
     }
     
     public TextureRegion getCurrentFrame() {

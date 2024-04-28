@@ -52,8 +52,8 @@ public class TileMapHelper {
                     Body body = BodyHelper.createBody(
                         rectangle.getX() + rectangle.getWidth() / 2, 
                         rectangle.getY() + rectangle.getHeight() / 2, 
-                        rectangle.getWidth(),
-                        rectangle.getHeight(),
+                        rectangle.getWidth() / 2,
+                        rectangle.getHeight() / 2,
                         false,
                         gameScreen.getWorld()
                     );

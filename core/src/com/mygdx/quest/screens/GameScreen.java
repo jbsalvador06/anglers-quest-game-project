@@ -91,7 +91,7 @@ public class GameScreen extends ManagedScreenAdapter {
         
         this.inventory = new Inventory();
         
-        this.stage = new Stage(new ExtendViewport(game.widthScreen, game.heightScreen, camera));
+        this.stage = new Stage(new FitViewport(game.widthScreen, game.heightScreen, camera));
     }
 
     @Override
@@ -177,9 +177,12 @@ public class GameScreen extends ManagedScreenAdapter {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(Color.valueOf("#80b782"));
+        stage.getViewport().apply();
+        uiStage.getViewport().apply();
         
         update(delta);
 
+        mapRenderer.setView(camera);
         mapRenderer.render();
 
         stage.act(delta);
@@ -198,27 +201,16 @@ public class GameScreen extends ManagedScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
+        super.resize(width, height);
         camera.setToOrtho(false, width / 2, height / 2);
+        uiStage.getViewport().update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     private void update(float delta) {
         world.step(1 / 60f, 6, 2);
         cameraUpdate(delta);
-
-        Vector3 projectedPosition = camera.project(new Vector3(player.getBody().getPosition().x * Constants.PPM, player.getBody().getPosition().y * Constants.PPM, 0));
-
-        playerCircle = new Circle(projectedPosition.x, projectedPosition.y, 150);
-
-        Vector3 rectangleProjectedPosition = camera.project(new Vector3(0 * Constants.PPM, 0 * Constants.PPM, 0));
-
-        testRectangle = new Rectangle(rectangleProjectedPosition.x, rectangleProjectedPosition.y, 100, 300);
-
-        if (checkForCollision(playerCircle, testRectangle)) {
-            System.out.println("Collision detected!");
-        }
         
-        
-        mapRenderer.setView(camera);
         player.update();
     }
 
@@ -226,10 +218,6 @@ public class GameScreen extends ManagedScreenAdapter {
         camera.zoom = Constants.zoom;
         // CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
         CameraHandler.freeRoam(camera, player.getBody().getPosition().scl(Constants.PPM));
-    }
-
-    private boolean checkForCollision(Circle circle, Rectangle rectangle) {
-        return Intersector.overlaps(circle, rectangle);
     }
 
     public World getWorld() {
@@ -248,6 +236,7 @@ public class GameScreen extends ManagedScreenAdapter {
     @Override
     public void dispose() {
         mapRenderer.dispose();
+        mapRenderer.getMap().dispose();
         stage.dispose();
         box2dDebugRenderer.dispose();
         world.dispose();

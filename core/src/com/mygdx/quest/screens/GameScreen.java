@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
@@ -115,7 +114,7 @@ public class GameScreen extends ManagedScreenAdapter {
 
         Random rand = new Random();
 
-        for (int i = 0; i < 5 ; i++) {
+        for (int i = 0; i < 9 ; i++) {
             player.addItem(fishes.get(fish[rand.nextInt(21)]));
         }
 
@@ -154,12 +153,25 @@ public class GameScreen extends ManagedScreenAdapter {
             }
         });
 
+        TextButton sellButton = new TextButton("Sell", skin);
+
+        sellButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                sellShop();
+            }
+        });
+
         mainTable.add(shopButton);
+        mainTable.add(sellButton);
     }
 
     private void openShop() {
-        shop.sellFish();
         shop.buyUpgrades();
+    }
+
+    private void sellShop() {
+        shop.sellFish();
     }
 
     @Override
@@ -182,8 +194,6 @@ public class GameScreen extends ManagedScreenAdapter {
         batch.end();
 
         box2dDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
-
-        renderCollisions();
     }
 
     @Override
@@ -212,20 +222,6 @@ public class GameScreen extends ManagedScreenAdapter {
         player.update();
     }
 
-    private void renderCollisions() {
-        shapeRenderer.begin(ShapeType.Line);
-
-        // Drawing the circle
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(playerCircle.x, playerCircle.y, playerCircle.radius);
-
-        // Drawing the rectangle
-        shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.rect(testRectangle.x, testRectangle.y, testRectangle.width, testRectangle.height);
-
-        shapeRenderer.end();
-    }
-
     private void cameraUpdate(float delta) {
         camera.zoom = Constants.zoom;
         // CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
@@ -242,6 +238,11 @@ public class GameScreen extends ManagedScreenAdapter {
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    @Override
+    public void pause() {
+        System.out.println("GameScreen Paused");
     }
 
     @Override

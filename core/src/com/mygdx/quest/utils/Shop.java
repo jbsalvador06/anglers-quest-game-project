@@ -49,6 +49,7 @@ public class Shop {
     public void buyUpgrades() {
         // Print available upgrades
         System.out.println("Upgrades available:");
+        System.out.println("Coins: " + playerCoins);
         for (String name : upgrades.keySet()) {
             System.out.println("- " + name + " (" + upgrades.get(name) + ")" );
         }
@@ -59,10 +60,15 @@ public class Shop {
 
         if (upgrades.containsKey(upgradeName)) {
             int cost = upgrades.get(upgradeName);
-            playerCoins -= cost;
-            System.out.println("Purchased " + upgradeName + " for " + cost);
 
-            // TODO: Apply upgrade to player
+            if (playerCoins > cost) {
+                playerCoins -= cost;
+                System.out.println("Purchased " + upgradeName + " for " + cost);
+
+                // TODO: Apply upgrade to player
+            } else {
+                System.out.println("Not enough coins!");
+            }
         } else {
             System.out.println("Invalid upgrade!");
         }

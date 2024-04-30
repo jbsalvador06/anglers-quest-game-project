@@ -57,8 +57,8 @@ public class MainMenuScreen extends ManagedScreenAdapter {
         String title = "{COLOR=black}{WAVE}Angler's" + "\n{COLOR=black}{WAVE}Quest";
 
         TypingLabel titleLabel = new TypingLabel(title, skin);
-        titleLabel.setAlignment(1);
-        titleLabel.setFontScale(5f);
+        // titleLabel.setAlignment(1);
+        // titleLabel.setFontScale(5f);
 
         // Configure buttons
         TextButton playButton = new TextButton("Play", skin);
@@ -99,16 +99,12 @@ public class MainMenuScreen extends ManagedScreenAdapter {
         //     .pad(50);
         // mainTable.row();
         mainTable.add(image)
-            .colspan(4)
+            .colspan(3)
             // .expandX()
             // .fillX()
             .pad(50);
         mainTable.row();
         mainTable.add(playButton)
-            .width(game.widthScreen / 8)
-            .height(game.heightScreen / 8)
-            .pad(10);
-        mainTable.add(loadButton)
             .width(game.widthScreen / 8)
             .height(game.heightScreen / 8)
             .pad(10);

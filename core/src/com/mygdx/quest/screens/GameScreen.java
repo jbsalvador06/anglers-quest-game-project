@@ -2,7 +2,6 @@ package com.mygdx.quest.screens;
 
 import java.util.Map;
 import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,10 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,9 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
@@ -75,7 +72,7 @@ public class GameScreen extends ManagedScreenAdapter {
         this.assets = game.assets;
         this.skin = assets.getAssetManager().get(Assets.SKIN);
         this.batch = new SpriteBatch();
-        this.mapRenderer = new OrthogonalTiledMapRenderer(assets.getMap());
+        this.mapRenderer = new OrthogonalTiledMapRenderer(assets.getMap(), 1 / Constants.PPM);
         this.camera = new OrthographicCamera();
         camera.setToOrtho(false, game.widthScreen / 2, game.heightScreen / 2);
 
@@ -97,6 +94,7 @@ public class GameScreen extends ManagedScreenAdapter {
     @Override
     public void show() {
         System.out.println("Game Screen \n");
+        System.out.println(uiStage.getViewport().getWorldWidth() + " " + uiStage.getViewport().getWorldHeight());
         System.out.println(skin);
 
         Gdx.input.setInputProcessor(uiStage);
@@ -144,9 +142,9 @@ public class GameScreen extends ManagedScreenAdapter {
         mainTable.setColor(Color.GRAY);
         mainTable.debugAll();
 
-        TextButton shopButton = new TextButton("Shop", skin);
-
-        shopButton.addListener(new ClickListener() {
+        TextButton buyButton = new TextButton("Buy", skin);
+        
+        buyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 openShop();
@@ -162,16 +160,8 @@ public class GameScreen extends ManagedScreenAdapter {
             }
         });
 
-        mainTable.add(shopButton);
+        mainTable.add(buyButton);
         mainTable.add(sellButton);
-    }
-
-    private void openShop() {
-        shop.buyUpgrades();
-    }
-
-    private void sellShop() {
-        shop.sellFish();
     }
 
     @Override
@@ -207,19 +197,6 @@ public class GameScreen extends ManagedScreenAdapter {
         stage.getViewport().update(width, height, true);
     }
 
-    private void update(float delta) {
-        world.step(1 / 60f, 6, 2);
-        cameraUpdate(delta);
-        
-        player.update();
-    }
-
-    private void cameraUpdate(float delta) {
-        camera.zoom = Constants.zoom;
-        // CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
-        CameraHandler.freeRoam(camera, player.getBody().getPosition().scl(Constants.PPM));
-    }
-
     public World getWorld() {
         return world;
     }
@@ -245,4 +222,43 @@ public class GameScreen extends ManagedScreenAdapter {
         skin.dispose();
     }
 
+    private boolean isShopOpen = false;
+
+    private void openShop() {
+        if (!isShopOpen) {
+            Window window = new Window("Shop", skin);
+            TextButton closeShop = new TextButton("X", skin);
+            closeShop.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    uiStage.getActors().removeValue(window, true);
+                }
+            });
+
+            window.add(closeShop).right().top();
+
+            uiStage.addActor(window);
+            isShopOpen = true;
+        } else {
+            isShopOpen = false;
+        }
+    }
+
+    private void sellShop() {
+        shop.sellFish();
+    }
+
+    private void update(float delta) {
+        world.step(1 / 60f, 6, 2);
+        cameraUpdate(delta);
+        
+        player.update();
+    }
+
+    private void cameraUpdate(float delta) {
+        camera.zoom = Constants.zoom;
+        // CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
+        CameraHandler.freeRoam(camera, player.getBody().getPosition().scl(Constants.PPM), stage.getViewport());
+        // CameraHandler.limitCamera(camera, player.getBody().getPosition().scl(Constants.PPM), mapWidth, mapHeight);
+    }
 }

@@ -12,6 +12,8 @@ public class Shop {
 
     private int playerCoins;
 
+    private boolean isShopOpened = false;
+
     public Shop(List<Fish> playerInventory) {
         this.playerInventory = playerInventory;
         playerCoins = 0;

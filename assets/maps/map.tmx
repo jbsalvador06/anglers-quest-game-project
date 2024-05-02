@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< Updated upstream
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="42" nextobjectid="838">
-=======
+
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="165" height="65" tilewidth="16" tileheight="16" infinite="0" nextlayerid="43" nextobjectid="515">
->>>>>>> Stashed changes
  <tileset firstgid="1" source="Forest.tsx"/>
  <layer id="16" name="Mud" width="165" height="65">
   <data encoding="csv">
@@ -1248,13 +1245,10 @@
 </data>
  </layer>
  <objectgroup id="27" name="Obstacles" offsetx="-0.272727" offsety="0.045455">
-<<<<<<< Updated upstream
-  <object id="91" name="Player" x="1904.67" y="424" width="12.4545" height="22.4545"/>
-  <object id="104" x="1446.5" y="352.625">
-=======
+
   <object id="91" name="Player" x="1904.67" y="504" width="12.4545" height="22.4545"/>
   <object id="104" x="1446.5" y="432.625">
->>>>>>> Stashed changes
+
    <polygon points="0,0 0,11.875 17.75,11.5 17.625,-0.25"/>
   </object>
   <object id="195" x="1751.56" y="813.182">
@@ -1437,79 +1431,6 @@
   <object id="346" x="608" y="896">
    <polygon points="0,0 0,144 1648,144 1648,-16 0,-16"/>
   </object>
-<<<<<<< Updated upstream
-  <object id="794" name="Pond" x="1360" y="464" width="192" height="176"/>
-  <object id="795" name="Pond" x="1552" y="480" width="64" height="144"/>
-  <object id="796" name="Pond" x="1616" y="480" width="32" height="128"/>
-  <object id="797" name="Pond" x="1648" y="496" width="16" height="112"/>
-  <object id="798" name="Pond" x="1664" y="496" width="16" height="96"/>
-  <object id="799" name="Pond" x="1680" y="512" width="16" height="80"/>
-  <object id="800" name="Pond" x="1696" y="528" width="16" height="32"/>
-  <object id="801" name="Pond" x="1312" y="480" width="48" height="160"/>
-  <object id="802" name="Pond" x="1264" y="480" width="48" height="144"/>
-  <object id="803" name="Pond" x="1232" y="496" width="32" height="112"/>
-  <object id="804" name="Pond" x="1216" y="512" width="16" height="96"/>
-  <object id="805" name="Pond" x="1200" y="512" width="16" height="80"/>
-  <object id="806" name="Pond" x="1152" y="528" width="48" height="48"/>
-  <object id="807" name="Pond" x="1120" y="528" width="32" height="32"/>
-  <object id="808" name="Pond" x="1088" y="512" width="32" height="48"/>
-  <object id="809" name="Pond" x="1056" y="496" width="32" height="48"/>
-  <object id="810" name="Pond" x="1040" y="496" width="16" height="32"/>
-  <object id="811" name="Pond" x="1008" y="480" width="32" height="48"/>
-  <object id="812" name="Pond" x="976" y="464" width="32" height="48"/>
-  <object id="813" name="Pond" x="928" y="464" width="48" height="32"/>
-  <object id="814" name="Pond" x="896" y="448" width="32" height="48"/>
-  <object id="815" name="Pond" x="880" y="432" width="16" height="64"/>
- </objectgroup>
- <objectgroup id="41" name="WaterBody">
-  <object id="373" name="River" x="816" y="432" width="64" height="48"/>
-  <object id="374" name="River" x="832" y="416" width="48" height="16"/>
-  <object id="375" name="River" x="800" y="400" width="32" height="32"/>
-  <object id="376" name="River" x="752" y="448" width="64" height="32"/>
-  <object id="377" name="River" x="672" y="464" width="80" height="32"/>
-  <object id="378" name="River" x="784" y="384" width="16" height="48"/>
-  <object id="379" name="River" x="752" y="384" width="32" height="32"/>
-  <object id="380" name="River" x="736" y="368" width="16" height="48"/>
-  <object id="381" name="River" x="720" y="368" width="16" height="32"/>
-  <object id="382" name="River" x="704" y="352" width="16" height="48"/>
-  <object id="383" name="River" x="688" y="352" width="16" height="32"/>
-  <object id="384" name="River" x="672" y="336" width="16" height="48"/>
-  <object id="385" name="River" x="640" y="320" width="32" height="48"/>
-  <object id="386" name="River" x="624" y="304" width="16" height="48"/>
-  <object id="387" name="River" x="608" y="288" width="16" height="64"/>
-  <object id="388" name="River" x="592" y="272" width="16" height="16"/>
-  <object id="389" name="River" x="576" y="256" width="16" height="16"/>
-  <object id="390" name="River" x="592" y="352" width="16" height="32"/>
-  <object id="391" name="River" x="608" y="384" width="16" height="32"/>
-  <object id="392" name="River" x="656" y="448" width="16" height="32"/>
-  <object id="393" name="River" x="640" y="432" width="16" height="160"/>
-  <object id="394" name="River" x="624" y="416" width="16" height="176"/>
-  <object id="395" name="River" x="624" y="592" width="16" height="96"/>
-  <object id="396" name="River" x="608" y="688" width="16" height="80"/>
-  <object id="397" name="River" x="592" y="768" width="16" height="96"/>
-  <object id="816" name="Pond" x="1360" y="464" width="192" height="176"/>
-  <object id="817" name="Pond" x="1552" y="480" width="64" height="144"/>
-  <object id="818" name="Pond" x="1616" y="480" width="32" height="128"/>
-  <object id="819" name="Pond" x="1648" y="496" width="16" height="112"/>
-  <object id="820" name="Pond" x="1664" y="496" width="16" height="96"/>
-  <object id="821" name="Pond" x="1680" y="512" width="16" height="80"/>
-  <object id="822" name="Pond" x="1696" y="528" width="16" height="32"/>
-  <object id="823" name="Pond" x="1312" y="480" width="48" height="160"/>
-  <object id="824" name="Pond" x="1264" y="480" width="48" height="144"/>
-  <object id="825" name="Pond" x="1232" y="496" width="32" height="112"/>
-  <object id="826" name="Pond" x="1216" y="512" width="16" height="96"/>
-  <object id="827" name="Pond" x="1200" y="512" width="16" height="80"/>
-  <object id="828" name="Pond" x="1152" y="528" width="48" height="48"/>
-  <object id="829" name="Pond" x="1120" y="528" width="32" height="32"/>
-  <object id="830" name="Pond" x="1088" y="512" width="32" height="48"/>
-  <object id="831" name="Pond" x="1056" y="496" width="32" height="48"/>
-  <object id="832" name="Pond" x="1040" y="496" width="16" height="32"/>
-  <object id="833" name="Pond" x="1008" y="480" width="32" height="48"/>
-  <object id="834" name="Pond" x="976" y="464" width="32" height="48"/>
-  <object id="835" name="Pond" x="928" y="464" width="48" height="32"/>
-  <object id="836" name="Pond" x="896" y="448" width="32" height="48"/>
-  <object id="837" name="Pond" x="880" y="432" width="16" height="64"/>
-=======
   <object id="235" name="Water" x="880" y="576">
    <polygon points="0,0 0,-64 16,-64 16,0"/>
   </object>

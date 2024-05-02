@@ -16,7 +16,7 @@ public class Fish {
         LEGENDARY
     }
 
-    public Fish(String name, String description, String location, Rarity rarity, float weight, int price) {
+    public Fish(String name, String description, String location, Rarity rarity, float weight) {
         this.name = name;
         this.description = description;
         this.location = location;

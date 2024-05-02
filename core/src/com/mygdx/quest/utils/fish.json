@@ -1,170 +1,114 @@
 [
     {
-        "name": "Red Snapper",
-        "description": "A red fish with white spots",
-        "location": "Ocean",
-        "rarity": "COMMON",
-        "weight": 2,
-        "price": 5
-    },
-    {
-        "name": "Clownfish",
-        "description": "An orange fish with white stripes",
-        "location": "Ocean",
-        "rarity": "COMMON",
-        "weight": 0.5,
-        "price": 2
-    },
-    {
-        "name": "Blue Tang",
-        "description": "A blue fish popularized by Finding Nemo",
-        "location": "Ocean",
-        "rarity": "COMMON",
-        "weight": 1,
-        "price": 3
-    },
-    {
-        "name": "Salmon",
-        "description": "A pink fish that swims upstream to spawn",
-        "location": "River",
-        "rarity": "COMMON",
-        "weight": 5,
-        "price": 10
-    },
-    {
-        "name": "Trout",
-        "description": "A greenish fish with spots",
-        "location": "River",
-        "rarity": "COMMON",
-        "weight": 2,
-        "price": 6
-    },
-    {
-        "name": "Catfish",
-        "description": "A bottom-dwelling fish with whiskers",
-        "location": "River",
-        "rarity": "COMMON",
-        "weight": 4,
-        "price": 8
-    },
-    {
-        "name": "Pike",
-        "description": "A predatory fish with a long body",
+        "name": "Large Mouth Bass",
+        "description": "Dark olive green on the back with light green sides shading to a white belly.",
         "location": "Lake",
         "rarity": "COMMON",
-        "weight": 7,
-        "price": 12
-    },
-    {
-        "name": "Bass",
-        "description": "A popular game fish",
-        "location": "Lake",
-        "rarity": "COMMON",
-        "weight": 3,
-        "price": 7
-    },
-    {
-        "name": "Perch",
-        "description": "A small fish with distinctive black bands",
-        "location": "Lake",
-        "rarity": "COMMON",
-        "weight": 1,
-        "price": 3
-    },
-    {
-        "name": "Tuna",
-        "description": "A large predatory fish",
-        "location": "Ocean",
-        "rarity": "RARE",
-        "weight": 15,
-        "price": 30
-    },
-    {
-        "name": "Swordfish",
-        "description": "A fish with a long, sword-like bill",
-        "location": "Ocean",
-        "rarity": "RARE",
-        "weight": 50,
-        "price": 100
-    },
-    {
-        "name": "Marlin",
-        "description": "A large game fish with a spear-like upper jaw",
-        "location": "Ocean",
-        "rarity": "RARE",
-        "weight": 100,
-        "price": 200
-    },
-    {
-        "name": "Sturgeon",
-        "description": "A large fish known for its caviar",
-        "location": "River",
-        "rarity": "RARE",
-        "weight": 60,
-        "price": 120
+        "weight": 24,
+        "imgUrl": "assets/fish/largemouthbass.png"
     },
     {
         "name": "Walleye",
-        "description": "A freshwater fish with large, glassy eyes",
-        "location": "River",
-        "rarity": "RARE",
-        "weight": 4,
-        "price": 10
+        "description": "Primarily gold and olive in color, with a white belly.",
+        "location": "Lake",
+        "rarity": "COMMON",
+        "weight": 31,
+        "imgUrl": "assets/fish/walleye.png"
     },
     {
-        "name": "Muskellunge",
-        "description": "A large, toothy pike-like fish",
-        "location": "River",
-        "rarity": "RARE",
-        "weight": 15,
-        "price": 30
-    },
-    {
-        "name": "Northern Pike",
-        "description": "A large, aggressive pike species",
+        "name": "Trout",
+        "description": "Trout have fins entirely without spines, and all of them have a small adipose fin along the back, near the tail.",
         "location": "Lake",
         "rarity": "RARE",
-        "weight": 12,
-        "price": 25
+        "weight": 22,
+        "imgUrl": "assets/fish/trout.png"
     },
     {
-        "name": "Striped Bass",
-        "description": "A large fish with dark horizontal stripes",
+        "name": "Trout",
+        "description": "Trout have fins entirely without spines, and all of them have a small adipose fin along the back, near the tail.",
         "location": "Lake",
         "rarity": "RARE",
-        "weight": 8,
-        "price": 16
+        "weight": 56,
+        "imgUrl": "assets/fish/trout.png"
     },
     {
         "name": "Crappie",
-        "description": "A popular panfish known for its tasty fillets",
+        "description": "Usually silvery-gray to green in color and show irregular or mottled black splotches over the entire body.",
         "location": "Lake",
+        "rarity": "LEGENDARY",
+        "weight": 79,
+        "imgUrl": "assets/fish/crappie.png"
+    },
+    {
+        "name": "Seabass",
+        "description": "An elongated body shape, large head and mouth, tight scales, and a broad, fork-less tail.",
+        "location": "Pond",
+        "rarity": "COMMON",
+        "weight": 69,
+        "imgUrl": "assets/fish/seabass.png"
+    },
+    {
+        "name": "Goldfish",
+        "description": "Have two sets of paired fins and three sets of single fins.",
+        "location": "Pond",
+        "rarity": "COMMON",
+        "weight": 14,
+        "imgUrl": "assets/fish/goldfish.png"
+    },
+    {
+        "name": "Comet",
+        "description": "They have a long, flowing, forked tail and are gold or orange in color, and can sometimes have black markings.",
+        "location": "Pond",
+        "rarity": "COMMON",
+        "weight": 63,
+        "imgUrl": "assets/fish/comet.png"
+    },
+    {
+        "name": "Oranda",
+        "description": "A breed of goldfish characterized by a prominent bubble-like hood on the head.",
+        "location": "Pond",
         "rarity": "RARE",
-        "weight": 2,
-        "price": 5
+        "weight": 33,
+        "imgUrl": "assets/fish/oranda.png"
     },
     {
-        "name": "Bluefin Tuna",
-        "description": "A highly prized tuna species",
-        "location": "Ocean",
-        "rarity": "LEGENDARY",
-        "weight": 250,
-        "price": 500
+        "name": "Shubunkin",
+        "description": "Are a straight tailed, iridescent scaled goldfish",
+        "location": "Pond",
+        "rarity": "RARE",
+        "weight": 48,
+        "imgUrl": "assets/fish/shubunkin.png"
     },
     {
-        "name": "Wahoo",
-        "description": "A fast-swimming game fish",
-        "location": "Ocean",
-        "rarity": "LEGENDARY",
-        "weight": 40,
-        "price": 80
+        "name": "Mosquito Fish",
+        "description": "Small in comparison to many other freshwater fish",
+        "location": "Pond",
+        "rarity": "RARE",
+        "weight": 61,
+        "imgUrl": "assets/fish/mosquitofish.png"
     },
     {
-        "name": "Mahi Mahi",
-        "description": "A colorful, acrobatic fish found in warm waters",
-        "location": "Ocean",
+        "name": "Sunfish",
+        "description": "from the family Molidae and are the largest bony fish in the world.",
+        "location": "Pond",
         "rarity": "LEGENDARY",
-        "weight": 40,
-        "price": 80
+        "weight": 41,
+        "imgUrl": "assets/fish/sunfish.png"
+    },
+    {
+        "name": "Catfish",
+        "description": "Their whisker-like barbels, which are located on the nose, each side of the mouth, and on the chin.",
+        "location": "Pond",
+        "rarity": "LEGENDARY",
+        "weight": 87,
+        "imgUrl": "assets/fish/catfish.png"
+    },
+    {
+        "name": "Koi",
+        "description": "Colorful, ornamental versions of the common carp.",
+        "location": "Pond",
+        "rarity": "LEGENDARY",
+        "weight": 94,
+        "imgUrl": "assets/fish/KO1.png"
     }
 ]

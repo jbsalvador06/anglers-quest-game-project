@@ -9,10 +9,12 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,6 +28,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private final AnglersQuest game;
     private Skin skin;
     private Stage stage;
+    private Image background;
 
     private TextButton playButton, creditsButton, exitButton;
 
@@ -37,87 +40,21 @@ public class MainMenuScreen extends ScreenAdapter {
     @Override
     public void show() {
         System.out.println("MAIN MENU SCREEN");
-        // For initializing background
+        Texture bgTexture = game.assets.get("assets/images/background.png");
+
+        background = new Image(bgTexture);
+        background.setFillParent(true);
 
         Gdx.input.setInputProcessor(stage);
         stage.clear();
+
+        stage.addActor(background);
 
         this.skin = new Skin();
         this.skin.addRegions(game.assets.get("assets/skins/quest-skin.atlas", TextureAtlas.class));
         this.skin.load(Gdx.files.internal("assets/skins/quest-skin.json"));
 
         initButton();
-
-        // Table mainTable = new Table();
-        // mainTable.setFillParent(true);
-        // mainTable.center();
-
-        // // Configure title
-        // String title = "{COLOR=black}{WAVE}Angler's" + "\n{COLOR=black}{WAVE}Quest";
-
-        // TypingLabel titleLabel = new TypingLabel(title, skin);
-        // // titleLabel.setAlignment(1);
-        // // titleLabel.setFontScale(5f);
-
-        // // Configure buttons
-        // TextButton playButton = new TextButton("Play", skin);
-        // TextButton loadButton = new TextButton("Load", skin);
-        // TextButton creditsButton = new TextButton("Credits", skin);
-        // TextButton exitButton = new TextButton("Exit", skin);
-
-        // playButton.addListener(new ClickListener() {
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         game.getScreenManager().pushScreen(new LoadingScreen(game), null);
-        //     }
-        // });
-        // loadButton.addListener(new ClickListener() {
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         System.out.println("Do something for this please");
-        //     }
-        // });
-        // creditsButton.addListener(new ClickListener() {
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         System.out.println("You have clicked the credits button");
-        //     }
-        // });
-        // exitButton.addListener(new ClickListener() {
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         Gdx.app.exit();
-        //     }
-        // });
-
-        // // Arrange the table
-        // // mainTable.add(titleLabel)
-        // //     .colspan(4)
-        // //     .expandX()
-        // //     .fillX()
-        // //     .pad(50);
-        // // mainTable.row();
-        // mainTable.add(image)
-        //     .colspan(3)
-        //     // .expandX()
-        //     // .fillX()
-        //     .pad(50);
-        // mainTable.row();
-        // mainTable.add(playButton)
-        //     .width(game.widthScreen / 8)
-        //     .height(game.heightScreen / 8)
-        //     .pad(10);
-        // mainTable.add(creditsButton)
-        //     .width(game.widthScreen / 8)
-        //     .height(game.heightScreen / 8)
-        //     .pad(10);
-        // mainTable.add(exitButton)
-        //     .width(game.widthScreen / 8)
-        //     .height(game.heightScreen / 8)
-        //     .pad(10);
-        // // mainTable.debugAll();
-
-        // stage.addActor(mainTable);
     }
 
     @Override
@@ -130,12 +67,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-        // viewport.update(width, height);
-        // camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        // camera.update();
-        // viewport.update(width, height, true);
-        // game.widthScreen = width;
-        // game.heightScreen = height;
+        stage.getViewport().update(width, height, true);
     }
 
     @Override

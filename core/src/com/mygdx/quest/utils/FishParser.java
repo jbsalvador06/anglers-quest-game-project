@@ -30,10 +30,10 @@ public class FishParser {
                 Rarity rarity = Rarity.valueOf((String) fishObj.get("rarity"));
                 Number num = (Number) fishObj.get("weight");
                 float weight = num.floatValue();
-                Number num2 = (Number) fishObj.get("price");
-                int price = num2.intValue();
+                // Number num2 = (Number) fishObj.get("price");
+                // int price = num2.intValue();
 
-                Fish fish = new Fish(name, description, location, rarity, weight, price);
+                Fish fish = new Fish(name, description, location, rarity, weight);
                 fishMap.put(name, fish);
         }
 

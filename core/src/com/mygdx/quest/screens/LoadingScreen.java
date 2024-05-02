@@ -23,13 +23,12 @@ public class LoadingScreen extends ScreenAdapter {
     public LoadingScreen(final AnglersQuest game) {
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
-        // this.viewport = new ExtendViewport(game.widthScreen, game.heightScreen);
-        // this.stage = new Stage(viewport);
     }
 
     private void queueAssets() {
         game.assets.load("assets/anglers-quest-header.png", Texture.class);
         game.assets.load("assets/skins/quest-skin.atlas", TextureAtlas.class);
+        game.assets.load("assets/images/background.png", Texture.class);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void update(float delta) {
         progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
-        System.out.println(progress + " " + game.assets.getProgress());
+        // System.out.println(progress + " " + game.assets.getProgress());
 
         if (game.assets.update() && progress >= game.assets.getProgress() - 0.001f) {
             game.setScreen(game.splashScreen);
@@ -53,10 +52,6 @@ public class LoadingScreen extends ScreenAdapter {
         ScreenUtils.clear(Color.valueOf("#80b782"));
 
         update(delta);
-        // viewport.apply();
-
-        // stage.act();
-        // stage.draw();
 
         game.camera.position.set(AnglersQuest.V_WIDTH / 2, AnglersQuest.V_HEIGHT / 2, 0f);
         game.camera.update();
@@ -70,7 +65,7 @@ public class LoadingScreen extends ScreenAdapter {
         // float rectY = game.camera.viewportHeight / 3;
 
         shapeRenderer.setColor(Color.FOREST);
-        shapeRenderer.rect(32, game.camera.viewportWidth / 2 - 8, game.camera.viewportWidth - 64, 16);
+        shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, game.camera.viewportWidth - 64, 16);
 
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
@@ -88,7 +83,8 @@ public class LoadingScreen extends ScreenAdapter {
 
     @Override
     public void resize(int width, int height) {
-
+        game.camera.viewportWidth = width;
+        game.camera.viewportHeight = height;
     }
 
     @Override

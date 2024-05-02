@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="41" nextobjectid="347">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="150" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="42" nextobjectid="398">
  <tileset firstgid="1" source="Forest.tsx"/>
  <layer id="16" name="-1" width="150" height="60" locked="1">
   <data encoding="csv">
@@ -1153,7 +1153,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="27" name="Obstacles" offsetx="-0.272727" offsety="0.045455">
+ <objectgroup id="27" name="Obstacles" visible="0" offsetx="-0.272727" offsety="0.045455">
   <object id="91" name="Player" x="1904.67" y="424" width="12.4545" height="22.4545"/>
   <object id="104" x="1446.5" y="352.625">
    <polygon points="0,0 0,11.875 17.75,11.5 17.625,-0.25"/>
@@ -1229,147 +1229,6 @@
   </object>
   <object id="189" x="1095.44" y="226.144">
    <polygon points="0,0 -0.181818,10.6364 17.0909,10.8182 17.0909,-0.181818"/>
-  </object>
-  <object id="235" name="Water" x="880" y="496">
-   <polygon points="0,0 0,-64 16,-64 16,0"/>
-  </object>
-  <object id="237" name="Water" x="896" y="448">
-   <polygon points="0,0 0,48 32,48 32,0"/>
-  </object>
-  <object id="238" name="Water" x="928" y="464">
-   <polygon points="0,0 0,32 48,32 48,0"/>
-  </object>
-  <object id="241" name="Water" x="880" y="480">
-   <polygon points="0,0 -64,0 -64,-48 0,-48"/>
-  </object>
-  <object id="242" name="Water" x="752" y="480">
-   <polygon points="0,0 64,0 64,-32 0,-32"/>
-  </object>
-  <object id="246" x="880" y="416">
-   <polygon points="0,0 -48,0 -48,16 0,16"/>
-  </object>
-  <object id="247" name="Water" x="832" y="400">
-   <polygon points="0,0 -32,0 -32,32 0,32"/>
-  </object>
-  <object id="248" name="Water" x="800" y="384">
-   <polygon points="0,0 0,48 -16,48 -16,0"/>
-  </object>
-  <object id="249" name="Water" x="784" y="384">
-   <polygon points="0,0 -32,0 -32,32 0,32"/>
-  </object>
-  <object id="250" name="Water" x="752" y="368">
-   <polygon points="0,0 -16,0 -16,48 0,48"/>
-  </object>
-  <object id="252" name="Water" x="736" y="368">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="253" name="Water" x="720" y="352">
-   <polygon points="0,0 -16,0 -16,48 0,48"/>
-  </object>
-  <object id="254" name="Water" x="704" y="352">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="255" name="Water" x="688" y="336">
-   <polygon points="0,0 -16,0 -16,48 0,48"/>
-  </object>
-  <object id="256" name="Water" x="672" y="320">
-   <polygon points="0,0 -32,0 -32,48 0,48"/>
-  </object>
-  <object id="257" name="Water" x="640" y="304">
-   <polygon points="0,0 -16,0 -16,48 0,48"/>
-  </object>
-  <object id="259" name="Water" x="624" y="288">
-   <polygon points="0,0 -16,0 -16,64 0,64"/>
-  </object>
-  <object id="260" x="608" y="272">
-   <polygon points="0,0 -16,0 -16,16 0,16"/>
-  </object>
-  <object id="261" name="Water" x="592" y="256">
-   <polygon points="0,0 -16,0 -16,16 0,16"/>
-  </object>
-  <object id="262" name="Water" x="752" y="464">
-   <polygon points="0,0 -80,0 -80,32 0,32"/>
-  </object>
-  <object id="263" name="Water" x="672" y="448">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="265" name="Water" x="656" y="432">
-   <polygon points="0,0 -16,0 -16,160 0,160"/>
-  </object>
-  <object id="266" name="Water" x="640" y="432">
-   <polygon points="0,0 0,-16 -16,-16 -16,160 0,160"/>
-  </object>
-  <object id="268" name="Water" x="640" y="592">
-   <polygon points="0,0 0,96 -16,96 -16,0"/>
-  </object>
-  <object id="272" name="Water" x="624" y="688">
-   <polygon points="0,0 0,80 -16,80 -16,0"/>
-  </object>
-  <object id="273" name="Water" x="608" y="768">
-   <polygon points="0,0 0,96 -16,96 -16,0"/>
-  </object>
-  <object id="275" name="Water" x="624" y="384">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="276" name="Water" x="608" y="352">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="277" name="Water" x="976" y="464">
-   <polygon points="0,0 32,0 32,48 0,48"/>
-  </object>
-  <object id="278" name="Water" x="1008" y="480">
-   <polygon points="0,0 32,0 32,48 0,48"/>
-  </object>
-  <object id="279" name="Water" x="1088" y="496">
-   <polygon points="0,0 0,48 -32,48 -32,0"/>
-  </object>
-  <object id="280" name="Water" x="1056" y="496">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="282" name="Water" x="1120" y="528">
-   <polygon points="0,0 0,32 32,32 32,0"/>
-  </object>
-  <object id="283" name="Water" x="1152" y="528">
-   <polygon points="0,0 0,48 48,48 48,0"/>
-  </object>
-  <object id="284" name="Water" x="1200" y="512">
-   <polygon points="0,0 0,80 16,80 16,0"/>
-  </object>
-  <object id="285" name="Water" x="1232" y="512">
-   <polygon points="0,0 -16,0 -16,96 0,96"/>
-  </object>
-  <object id="286" name="Water" x="1232" y="496">
-   <polygon points="0,0 32,0 32,112 0,112"/>
-  </object>
-  <object id="287" name="Water " x="1264" y="480">
-   <polygon points="0,0 0,144 48,144 48,0"/>
-  </object>
-  <object id="288" name="Water " x="1360" y="480">
-   <polygon points="0,0 -48,0 -48,160 0,160"/>
-  </object>
-  <object id="289" name="Water " x="1552" y="464">
-   <polygon points="0,0 -192,0 -192,176 0,176"/>
-  </object>
-  <object id="290" name="Water " x="1616" y="624">
-   <polygon points="0,0 -64,0 -64,-144 0,-144"/>
-  </object>
-  <object id="292" name="Water " x="1648" y="480">
-   <polygon points="0,0 -32,0 -32,128 0,128"/>
-  </object>
-  <object id="293" name="Water " x="1664" y="608">
-   <polygon points="0,0 -16,0 -16,-112 0,-112"/>
-  </object>
-  <object id="294" name="Water " x="1680" y="496">
-   <polygon points="0,0 -16,0 -16,96 0,96"/>
-  </object>
-  <object id="295" name="Water " x="1696" y="512">
-   <polygon points="0,0 -16,0 -16,80 0,80"/>
-  </object>
-  <object id="296" name="Water " x="1712" y="528">
-   <polygon points="0,0 -16,0 -16,32 0,32"/>
-  </object>
-  <object id="297" name="Water" x="1088" y="512">
-   <polygon points="0,0 32,0 32,48 0,48"/>
   </object>
   <object id="299" x="624" y="256">
    <polygon points="0,0 0,-16 -48,-16 -48,0"/>
@@ -1485,5 +1344,195 @@
   <object id="346" x="608" y="816">
    <polygon points="0,0 0,144 1648,144 1648,-16 0,-16"/>
   </object>
+  <object id="235" name="Water" x="880" y="496">
+   <polygon points="0,0 0,-64 16,-64 16,0"/>
+  </object>
+  <object id="237" name="Water" x="896" y="448">
+   <polygon points="0,0 0,48 32,48 32,0"/>
+  </object>
+  <object id="238" name="Water" x="928" y="464">
+   <polygon points="0,0 0,32 48,32 48,0"/>
+  </object>
+  <object id="241" name="Water" x="880" y="480">
+   <polygon points="0,0 -64,0 -64,-48 0,-48"/>
+  </object>
+  <object id="242" name="Water" x="752" y="480">
+   <polygon points="0,0 64,0 64,-32 0,-32"/>
+  </object>
+  <object id="246" name="Water" x="880" y="416">
+   <polygon points="0,0 -48,0 -48,16 0,16"/>
+  </object>
+  <object id="247" name="Water" x="832" y="400">
+   <polygon points="0,0 -32,0 -32,32 0,32"/>
+  </object>
+  <object id="248" name="Water" x="800" y="384">
+   <polygon points="0,0 0,48 -16,48 -16,0"/>
+  </object>
+  <object id="249" name="Water" x="784" y="384">
+   <polygon points="0,0 -32,0 -32,32 0,32"/>
+  </object>
+  <object id="250" name="Water" x="752" y="368">
+   <polygon points="0,0 -16,0 -16,48 0,48"/>
+  </object>
+  <object id="252" name="Water" x="736" y="368">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="253" name="Water" x="720" y="352">
+   <polygon points="0,0 -16,0 -16,48 0,48"/>
+  </object>
+  <object id="254" name="Water" x="704" y="352">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="255" name="Water" x="688" y="336">
+   <polygon points="0,0 -16,0 -16,48 0,48"/>
+  </object>
+  <object id="256" name="Water" x="672" y="320">
+   <polygon points="0,0 -32,0 -32,48 0,48"/>
+  </object>
+  <object id="257" name="Water" x="640" y="304">
+   <polygon points="0,0 -16,0 -16,48 0,48"/>
+  </object>
+  <object id="259" name="Water" x="624" y="288">
+   <polygon points="0,0 -16,0 -16,64 0,64"/>
+  </object>
+  <object id="260" name="Water" x="608" y="272">
+   <polygon points="0,0 -16,0 -16,16 0,16"/>
+  </object>
+  <object id="261" name="Water" x="592" y="256">
+   <polygon points="0,0 -16,0 -16,16 0,16"/>
+  </object>
+  <object id="262" name="Water" x="752" y="464">
+   <polygon points="0,0 -80,0 -80,32 0,32"/>
+  </object>
+  <object id="263" name="Water" x="672" y="448">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="265" name="Water" x="656" y="432">
+   <polygon points="0,0 -16,0 -16,160 0,160"/>
+  </object>
+  <object id="266" name="Water" x="640" y="432">
+   <polygon points="0,0 0,-16 -16,-16 -16,160 0,160"/>
+  </object>
+  <object id="268" name="Water" x="640" y="592">
+   <polygon points="0,0 0,96 -16,96 -16,0"/>
+  </object>
+  <object id="272" name="Water" x="624" y="688">
+   <polygon points="0,0 0,80 -16,80 -16,0"/>
+  </object>
+  <object id="273" name="Water" x="608" y="768">
+   <polygon points="0,0 0,96 -16,96 -16,0"/>
+  </object>
+  <object id="275" name="Water" x="624" y="384">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="276" name="Water" x="608" y="352">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="277" name="Water" x="976" y="464">
+   <polygon points="0,0 32,0 32,48 0,48"/>
+  </object>
+  <object id="278" name="Water" x="1008" y="480">
+   <polygon points="0,0 32,0 32,48 0,48"/>
+  </object>
+  <object id="279" name="Water" x="1088" y="496">
+   <polygon points="0,0 0,48 -32,48 -32,0"/>
+  </object>
+  <object id="280" name="Water" x="1056" y="496">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="282" name="Water" x="1120" y="528">
+   <polygon points="0,0 0,32 32,32 32,0"/>
+  </object>
+  <object id="283" name="Water" x="1152" y="528">
+   <polygon points="0,0 0,48 48,48 48,0"/>
+  </object>
+  <object id="284" name="Water" x="1200" y="512">
+   <polygon points="0,0 0,80 16,80 16,0"/>
+  </object>
+  <object id="285" name="Water" x="1232" y="512">
+   <polygon points="0,0 -16,0 -16,96 0,96"/>
+  </object>
+  <object id="286" name="Water" x="1232" y="496">
+   <polygon points="0,0 32,0 32,112 0,112"/>
+  </object>
+  <object id="287" name="Water " x="1264" y="480">
+   <polygon points="0,0 0,144 48,144 48,0"/>
+  </object>
+  <object id="288" name="Water " x="1360" y="480">
+   <polygon points="0,0 -48,0 -48,160 0,160"/>
+  </object>
+  <object id="289" name="Water " x="1552" y="464">
+   <polygon points="0,0 -192,0 -192,176 0,176"/>
+  </object>
+  <object id="290" name="Water " x="1616" y="624">
+   <polygon points="0,0 -64,0 -64,-144 0,-144"/>
+  </object>
+  <object id="292" name="Water " x="1648" y="480">
+   <polygon points="0,0 -32,0 -32,128 0,128"/>
+  </object>
+  <object id="293" name="Water " x="1664" y="608">
+   <polygon points="0,0 -16,0 -16,-112 0,-112"/>
+  </object>
+  <object id="294" name="Water " x="1680" y="496">
+   <polygon points="0,0 -16,0 -16,96 0,96"/>
+  </object>
+  <object id="295" name="Water " x="1696" y="512">
+   <polygon points="0,0 -16,0 -16,80 0,80"/>
+  </object>
+  <object id="296" name="Water " x="1712" y="528">
+   <polygon points="0,0 -16,0 -16,32 0,32"/>
+  </object>
+  <object id="297" name="Water" x="1088" y="512">
+   <polygon points="0,0 32,0 32,48 0,48"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="41" name="WaterBody">
+  <object id="350" name="Pond" x="1360" y="464" width="192" height="176"/>
+  <object id="351" name="Pond" x="1552" y="480" width="64" height="144"/>
+  <object id="352" name="Pond" x="1616" y="480" width="32" height="128"/>
+  <object id="353" name="Pond" x="1648" y="496" width="16" height="112"/>
+  <object id="354" name="Pond" x="1664" y="496" width="16" height="96"/>
+  <object id="355" name="Pond" x="1680" y="512" width="16" height="80"/>
+  <object id="356" name="Pond" x="1696" y="528" width="16" height="32"/>
+  <object id="357" name="Pond" x="1312" y="480" width="48" height="160"/>
+  <object id="358" name="Pond" x="1264" y="480" width="48" height="144"/>
+  <object id="359" name="Pond" x="1232" y="496" width="32" height="112"/>
+  <object id="360" name="Pond" x="1216" y="512" width="16" height="96"/>
+  <object id="361" name="Pond" x="1200" y="512" width="16" height="80"/>
+  <object id="362" name="Pond" x="1152" y="528" width="48" height="48"/>
+  <object id="363" name="Pond" x="1120" y="528" width="32" height="32"/>
+  <object id="364" name="Pond" x="1088" y="512" width="32" height="48"/>
+  <object id="366" name="Pond" x="1056" y="496" width="32" height="48"/>
+  <object id="367" name="Pond" x="1040" y="496" width="16" height="32"/>
+  <object id="368" name="Pond" x="1008" y="480" width="32" height="48"/>
+  <object id="369" name="Pond" x="976" y="464" width="32" height="48"/>
+  <object id="370" name="Pond" x="928" y="464" width="48" height="32"/>
+  <object id="371" name="Pond" x="896" y="448" width="32" height="48"/>
+  <object id="372" name="Pond" x="880" y="432" width="16" height="64"/>
+  <object id="373" name="River" x="816" y="432" width="64" height="48"/>
+  <object id="374" name="River" x="832" y="416" width="48" height="16"/>
+  <object id="375" name="River" x="800" y="400" width="32" height="32"/>
+  <object id="376" name="River" x="752" y="448" width="64" height="32"/>
+  <object id="377" name="River" x="672" y="464" width="80" height="32"/>
+  <object id="378" name="River" x="784" y="384" width="16" height="48"/>
+  <object id="379" name="River" x="752" y="384" width="32" height="32"/>
+  <object id="380" name="River" x="736" y="368" width="16" height="48"/>
+  <object id="381" name="River" x="720" y="368" width="16" height="32"/>
+  <object id="382" name="River" x="704" y="352" width="16" height="48"/>
+  <object id="383" name="River" x="688" y="352" width="16" height="32"/>
+  <object id="384" name="River" x="672" y="336" width="16" height="48"/>
+  <object id="385" name="River" x="640" y="320" width="32" height="48"/>
+  <object id="386" name="River" x="624" y="304" width="16" height="48"/>
+  <object id="387" name="River" x="608" y="288" width="16" height="64"/>
+  <object id="388" name="River" x="592" y="272" width="16" height="16"/>
+  <object id="389" name="River" x="576" y="256" width="16" height="16"/>
+  <object id="390" name="River" x="592" y="352" width="16" height="32"/>
+  <object id="391" name="River" x="608" y="384" width="16" height="32"/>
+  <object id="392" name="River" x="656" y="448" width="16" height="32"/>
+  <object id="393" name="River" x="640" y="432" width="16" height="160"/>
+  <object id="394" name="River" x="624" y="416" width="16" height="176"/>
+  <object id="395" name="River" x="624" y="592" width="16" height="96"/>
+  <object id="396" name="River" x="608" y="688" width="16" height="80"/>
+  <object id="397" name="River" x="592" y="768" width="16" height="96"/>
  </objectgroup>
 </map>

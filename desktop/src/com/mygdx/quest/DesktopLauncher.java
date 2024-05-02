@@ -1,5 +1,6 @@
 package com.mygdx.quest;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
@@ -12,7 +13,8 @@ public class DesktopLauncher {
 		config.setWindowedMode(1280, 720);
 		// config.setResizable(false);
 		config.setForegroundFPS(60);
-		config.useVsync(true);
+		config.setWindowIcon(FileType.Internal, "assets/anglers-quest-icon.png");
+		// config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		
 		new Lwjgl3Application(new AnglersQuest(), config);
 	}

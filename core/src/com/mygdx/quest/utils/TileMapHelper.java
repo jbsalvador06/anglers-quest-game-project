@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -12,27 +13,21 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.screens.GameScreen;
 
 public class TileMapHelper {
-    
-    private final AnglersQuest game;
-    private Assets assets;
+
     private TiledMap tiledMap;
     private GameScreen gameScreen;
 
-    public TileMapHelper(GameScreen gameScreen, final AnglersQuest game) {
-        this.game = game;
-        this.assets = game.assets;
+    public TileMapHelper(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-
-        assets.loadMap();
     }
 
     public OrthogonalTiledMapRenderer setupMap() {
-        tiledMap = game.assets.getAssetManager().get(Assets.MAP);
+        // tiledMap = AnglersQuest.assets.getMap();
+        tiledMap = new TmxMapLoader().load("maps/map.tmx");
         parseMapObjects(tiledMap.getLayers().get("Obstacles").getObjects());
         return new OrthogonalTiledMapRenderer(tiledMap);
     }
@@ -57,7 +52,7 @@ public class TileMapHelper {
                         false,
                         gameScreen.getWorld()
                     );
-                    gameScreen.setPlayer(new Player(rectangle.getWidth(), rectangle.getHeight(), body, game));
+                    gameScreen.setPlayer(new Player(rectangle.getWidth(), rectangle.getHeight(), body));
                 }
             }
         }

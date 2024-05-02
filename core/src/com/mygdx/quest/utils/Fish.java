@@ -8,6 +8,8 @@ public class Fish {
     private int price;
     private int quantity;
 
+    private float rarityMultiplier;
+
     enum Rarity {
         COMMON,
         RARE,
@@ -20,7 +22,17 @@ public class Fish {
         this.location = location;
         this.rarity = rarity;
         this.weight = weight;
-        this.price = price;
+        
+        if (rarity == Rarity.COMMON) {
+            this.rarityMultiplier = 1f;
+        } else if (rarity == Rarity.RARE) {
+            this.rarityMultiplier = 1.5f;
+        } else if (rarity == Rarity.LEGENDARY) {
+            this.rarityMultiplier = 2f;
+        }
+
+        this.price = Math.round(rarityMultiplier * weight);
+
     }
 
     public String getName() {

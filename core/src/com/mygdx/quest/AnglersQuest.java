@@ -1,51 +1,73 @@
 package com.mygdx.quest;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
+import com.mygdx.quest.screens.GameScreen;
+import com.mygdx.quest.screens.LoadingScreen;
+import com.mygdx.quest.screens.MainMenuScreen;
 import com.mygdx.quest.screens.SplashScreen;
-import com.mygdx.quest.utils.Assets;
-
-import de.eskalon.commons.core.ManagedGame;
-import de.eskalon.commons.screen.ManagedScreen;
-import de.eskalon.commons.screen.transition.ScreenTransition;
-import de.eskalon.commons.screen.transition.SlidingTransition;
-import de.eskalon.commons.screen.transition.impl.SlidingDirection;
 
 
-public class AnglersQuest extends ManagedGame<ManagedScreen, ScreenTransition> {
+public class AnglersQuest extends Game {
+
+    public SpriteBatch batch;
+    Texture img;
+
+    public static AnglersQuest INSTANCE;
+
+    public static int V_WIDTH = 1280;
+    public static int V_HEIGHT = 720;
 
     public int widthScreen, heightScreen;
-    public Assets assets;
+    public OrthographicCamera camera;
 
-    private SpriteBatch batch;
-    public Object getScreenManager;
-	
+    public AnglersQuest() {
+        INSTANCE = this;
+    }
+
+    public AssetManager assets;
+    // Screens
+    public LoadingScreen loadingScreen;
+    public GameScreen gameScreen;
+    public SplashScreen splashScreen;
+    public MainMenuScreen mainMenuScreen;
+    public Object viewport;
+
 	@Override
     public final void create() {
-        super.create();
+
+        assets = new AssetManager();
         
         this.widthScreen = Gdx.graphics.getWidth();
         this.heightScreen = Gdx.graphics.getHeight();
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, widthScreen, heightScreen);
 
-        this.assets = new Assets();
+        // Potentially have to initialize font
 
-        this.batch = new SpriteBatch();  
-              
-        assets.loadSkin();
-        assets.getAssetManager().finishLoading();
+        batch = new SpriteBatch();  
 
-        this.screenManager.setAutoDispose(true, true);
-        this.screenManager.pushScreen(new SplashScreen(this), new SlidingTransition(batch, SlidingDirection.DOWN, false, 2.5f, Interpolation.bounceOut));
+        loadingScreen = new LoadingScreen(INSTANCE);
+        splashScreen = new SplashScreen(INSTANCE);
+        mainMenuScreen = new MainMenuScreen(INSTANCE);
+        gameScreen = new GameScreen(camera);
+
+
+        setScreen(loadingScreen);
     }
 
     @Override
-    public void render() {
-        super.render();
-    }
-
-    public SpriteBatch getBatch() {
-        return batch;
+    public void dispose() {
+        batch.dispose();
+        assets.dispose();
+        loadingScreen.dispose();
+        splashScreen.dispose();
+        mainMenuScreen.dispose();
+        gameScreen.dispose();
     }
 
 }

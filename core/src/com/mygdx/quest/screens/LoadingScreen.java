@@ -1,52 +1,50 @@
 package com.mygdx.quest.screens;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.quest.AnglersQuest;
 
-import de.eskalon.commons.screen.ManagedScreenAdapter;
-
-public class LoadingScreen extends ManagedScreenAdapter {
+public class LoadingScreen extends ScreenAdapter {
     
     private final AnglersQuest game;
-    private AssetManager assetManager;
+
     private ShapeRenderer shapeRenderer;
     private float progress;
     
-    private Stage stage;
-    private ExtendViewport viewport;
+    // private Stage stage;
+    // private ExtendViewport viewport;
 
     public LoadingScreen(final AnglersQuest game) {
         this.game = game;
-        this.assetManager = game.assets.getAssetManager();
         this.shapeRenderer = new ShapeRenderer();
-        this.progress = 0f;
-        this.viewport = new ExtendViewport(game.widthScreen, game.heightScreen);
-        this.stage = new Stage(viewport);
+        // this.viewport = new ExtendViewport(game.widthScreen, game.heightScreen);
+        // this.stage = new Stage(viewport);
+    }
+
+    private void queueAssets() {
+        game.assets.load("assets/anglers-quest-header.png", Texture.class);
+        game.assets.load("assets/skins/quest-skin.atlas", TextureAtlas.class);
     }
 
     @Override
     public void show() {
+        System.out.println("LOADING SCREEN");
+        this.progress = 0f;
         queueAssets();
     }
 
-    private void queueAssets() {
-        game.assets.loadMap();
-        game.assets.loadPlayer();
-    }
-
     private void update(float delta) {
-        progress = MathUtils.lerp(progress, assetManager.getProgress(), .1f);
-        System.out.println(progress + " " + assetManager.getProgress());
+        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
+        System.out.println(progress + " " + game.assets.getProgress());
 
-        if (assetManager.update() && progress > assetManager.getProgress() - 0.001f) {
-            game.getScreenManager().pushScreen(new GameScreen(game), null);
+        if (game.assets.update() && progress >= game.assets.getProgress() - 0.001f) {
+            game.setScreen(game.splashScreen);
         }
     }
 
@@ -55,29 +53,46 @@ public class LoadingScreen extends ManagedScreenAdapter {
         ScreenUtils.clear(Color.valueOf("#80b782"));
 
         update(delta);
-        viewport.apply();
+        // viewport.apply();
 
-        stage.act();
-        stage.draw();
+        // stage.act();
+        // stage.draw();
+
+        game.camera.position.set(AnglersQuest.V_WIDTH / 2, AnglersQuest.V_HEIGHT / 2, 0f);
+        game.camera.update();
+        shapeRenderer.setProjectionMatrix(game.camera.combined);
 
         shapeRenderer.begin(ShapeType.Filled);
+
+        // float rectWidth = game.camera.viewportWidth / 3;
+        // float rectHeight = 32;
+        // float centerX = (game.camera.viewportWidth - rectWidth) / 2;
+        // float rectY = game.camera.viewportHeight / 3;
+
         shapeRenderer.setColor(Color.FOREST);
-        shapeRenderer.rect(32, game.heightScreen / 2 - 8, game.widthScreen - 64, 16);
+        shapeRenderer.rect(32, game.camera.viewportWidth / 2 - 8, game.camera.viewportWidth - 64, 16);
 
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(32, game.heightScreen / 2 - 8, progress * (game.widthScreen - 64), 16);
+        shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
         shapeRenderer.end();
+
+        // shapeRenderer.setColor(Color.FOREST);
+        // shapeRenderer.rect(centerX, rectY, rectWidth, rectHeight);
+
+        // float progressWidth = progress * rectWidth;
+
+        // shapeRenderer.setColor(Color.WHITE);
+        // shapeRenderer.rect(centerX, rectY, progressWidth, rectHeight);
+        // shapeRenderer.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        super.resize(width, height);
-        viewport.update(width, height);
+
     }
 
     @Override
     public void dispose() {
         shapeRenderer.dispose();
-        stage.dispose();
     }
 }

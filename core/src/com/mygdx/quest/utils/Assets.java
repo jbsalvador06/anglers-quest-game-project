@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -23,6 +24,8 @@ public class Assets {
 
     public static final AssetDescriptor<TextureAtlas> PLAYER_TILESET = new AssetDescriptor<>("assets/player/playerMove.atlas", TextureAtlas.class);
 
+    public static final AssetDescriptor<Texture> SPLASH = new AssetDescriptor<>("assets/anglers-quest-header.png", Texture.class);
+
     public void loadSkin() {
         assetManager.load(SKIN);
     }
@@ -35,6 +38,10 @@ public class Assets {
         assetManager.load(PLAYER_TILESET);
     }
 
+    public void loadSplash() {
+        assetManager.load(SPLASH);
+    }
+
     public Skin getSkin() {
         return assetManager.get(SKIN);
     }
@@ -45,6 +52,10 @@ public class Assets {
 
     public TextureAtlas getPlayerTileset() {
         return assetManager.get(PLAYER_TILESET);
+    }
+
+    public Texture getSplash() {
+        return assetManager.get(SPLASH);
     }
 
     public AssetManager getAssetManager() {

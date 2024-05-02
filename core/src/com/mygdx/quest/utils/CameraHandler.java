@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.quest.AnglersQuest;
 
 public class CameraHandler {
     
@@ -15,16 +16,16 @@ public class CameraHandler {
         camera.update();
     }
 
-    public static void freeRoam(Camera camera, Vector2 target, Viewport viewport) {
+    public static void freeRoam(Camera camera, Vector2 target) {
         Vector3 position = camera.position;
-        position.x = target.x;
-        position.y = target.y;
+        position.x = Math.round(target.x * Constants.PPM * 10) / 10f;
+        position.y = Math.round(target.y * Constants.PPM * 10) / 10f;
         camera.position.set(position);
 
         float leftLimit = 0;
-        float rightLimit = viewport.getWorldWidth();
+        float rightLimit = AnglersQuest.V_WIDTH;
         float bottomLimit = 0;
-        float topLimit = viewport.getWorldHeight();
+        float topLimit = AnglersQuest.V_HEIGHT;
 
         if (camera.position.x < leftLimit) {
             camera.position.x = leftLimit;

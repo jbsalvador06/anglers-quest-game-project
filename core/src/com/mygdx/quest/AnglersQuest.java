@@ -54,7 +54,7 @@ public class AnglersQuest extends Game {
         loadingScreen = new LoadingScreen(INSTANCE);
         splashScreen = new SplashScreen(INSTANCE);
         mainMenuScreen = new MainMenuScreen(INSTANCE);
-        gameScreen = new GameScreen(camera);
+        gameScreen = new GameScreen(camera, INSTANCE);
 
 
         setScreen(loadingScreen);

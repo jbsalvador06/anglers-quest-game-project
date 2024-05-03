@@ -8,17 +8,24 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
 import com.mygdx.quest.utils.CameraHandler;
@@ -34,12 +41,13 @@ import de.eskalon.commons.screen.ManagedScreenAdapter;
 
 public class GameScreen extends ManagedScreenAdapter {
 
+    private final AnglersQuest game;
+
     // Temporary array for random generation
     private String[] fish = {"Large Mouth Bass", "Walleye", "Trout", "Crappie", "Seabass", "Goldfish", "Comet", "Oranda", "Shubunkin", "Mosquito Fish", "Sunfish", "Catfish", "Koi"};
 
     // For UI elements
-    private Stage uiStage;
-    private FitViewport uiViewport;
+    private Stage uiStage;;
 
     // Viewport
     private ExtendViewport viewport;
@@ -65,13 +73,14 @@ public class GameScreen extends ManagedScreenAdapter {
     private boolean pondKey = false;
     float elapsedTime = 0.0f;
 
-    private Inventory inventory;
     private Table mainTable;
 
     private Shop shop;
 
-    public GameScreen(OrthographicCamera camera) {
+    public GameScreen(OrthographicCamera camera, final AnglersQuest game) {
         
+        this.game = game;
+
         viewport = new ExtendViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         this.camera = camera;
         this.batch = new SpriteBatch();
@@ -79,10 +88,12 @@ public class GameScreen extends ManagedScreenAdapter {
         this.contactListener = new MyContactListener();
 
         // For UI elements
-        this.uiViewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
-        this.uiStage = new Stage(uiViewport);
+        this.uiStage = new Stage(new ScreenViewport(new OrthographicCamera()));
+        this.uiStage.setDebugAll(true);
         this.mainTable = new Table();
-        this.skin = new Skin(Gdx.files.internal("assets/skins/quest-skin.json"));
+        this.mainTable.setFillParent(true);
+        this.mainTable.debugAll();
+
 
         // Box2D
         this.world = new World(new Vector2(0, 0), false);
@@ -94,8 +105,6 @@ public class GameScreen extends ManagedScreenAdapter {
         this.tileMapHelper = new TileMapHelper(this);
         this.orthogonalTiledMapRenderer = tileMapHelper.setupMap();
         
-        this.inventory = new Inventory();
-        
     }
 
     private void update(float delta) {
@@ -105,9 +114,6 @@ public class GameScreen extends ManagedScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         orthogonalTiledMapRenderer.setView(camera);
         player.update();
-
-        uiStage.act(delta);
-        uiStage.draw();
 
         if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
             Gdx.app.exit();
@@ -127,7 +133,17 @@ public class GameScreen extends ManagedScreenAdapter {
 
     @Override
     public void show() {
-        System.out.println("Game Screen \n");
+        System.out.println("GAME SCREEN \n");
+
+        Gdx.input.setInputProcessor(uiStage);
+        uiStage.clear();
+
+        // For UI elements
+        this.skin = new Skin();
+        this.skin.addRegions(game.assets.get("assets/skins/quest-skin.atlas", TextureAtlas.class));
+        this.skin.load(Gdx.files.internal("assets/skins/quest-skin.json"));
+
+        initUI();
 
         Map<String, Fish> fishes = FishParser.parseFishJson("core/src/com/mygdx/quest/utils/fish.json");
 
@@ -151,31 +167,6 @@ public class GameScreen extends ManagedScreenAdapter {
         for (Fish fish : player.getInventory()) {
             System.out.println("Name: " + fish.getName() + " | Location: " + fish.getLocation() + " | Rarity: " + fish.getRarity() + " | Weight: " + fish.getWeight() + " | Price: " + fish.getPrice());
         }
-
-        // uiStage.addActor(mainTable);
-        // mainTable.setColor(Color.GRAY);
-        // mainTable.debugAll();
-
-        // TextButton buyButton = new TextButton("Buy", skin);
-        
-        // buyButton.addListener(new ClickListener() {
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         openShop();
-        //     }
-        // });
-
-        // TextButton sellButton = new TextButton("Sell", skin);
-
-        // sellButton.addListener(new ClickListener() {
-        //     @Override
-        //     public void clicked(InputEvent event, float x, float y) {
-        //         sellShop();
-        //     }
-        // });
-
-        // mainTable.add(buyButton);
-        // mainTable.add(sellButton);
     }
 
     @Override
@@ -183,6 +174,9 @@ public class GameScreen extends ManagedScreenAdapter {
         update(delta);
 
         ScreenUtils.clear(Color.valueOf("#80b782"));
+
+        uiStage.act(delta);
+        uiStage.draw();
 
         orthogonalTiledMapRenderer.render();
 
@@ -203,6 +197,16 @@ public class GameScreen extends ManagedScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+
+        // For UI elements
+        uiStage.getViewport().update(width, height, true);
+    }
+
+    private void initUI() {
+        Label label = new Label("TESTING TESTING", skin);
+        label.setZIndex(0);
+        mainTable.add(label).expand().top().padTop(100.0f);
+        uiStage.addActor(label);
     }
 
     public World getWorld() {
@@ -227,13 +231,10 @@ public class GameScreen extends ManagedScreenAdapter {
             if (contactListener.pondInteract) {
                 pondKey = true;
                 elapsedTime = 0.0f;
+                System.out.println("Does this work?");
+                renderFishingWindow();
             }
         }
-
-        // if (pondKey) {
-        //     renderFishingWindow();
-        //     pondKey = !pondKey;
-        // }
     }
 
     private void renderFishingWindow() {
@@ -248,31 +249,7 @@ public class GameScreen extends ManagedScreenAdapter {
         box2dDebugRenderer.dispose();
         orthogonalTiledMapRenderer.dispose();
         world.dispose();
+        skin.dispose();
+        uiStage.dispose();
     }
-
-    // private boolean isShopOpen = false;
-
-    // private void openShop() {
-    //     if (!isShopOpen) {
-    //         Window window = new Window("Shop", skin);
-    //         TextButton closeShop = new TextButton("X", skin);
-    //         closeShop.addListener(new ClickListener() {
-    //             @Override
-    //             public void clicked(InputEvent event, float x, float y) {
-    //                 uiStage.getActors().removeValue(window, true);
-    //             }
-    //         });
-
-    //         window.add(closeShop).right().top();
-
-    //         uiStage.addActor(window);
-    //         isShopOpen = true;
-    //     } else {
-    //         isShopOpen = false;
-    //     }
-    // }
-
-    // private void sellShop() {
-    //     shop.sellFish();
-    // }
 }

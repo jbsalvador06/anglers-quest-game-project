@@ -235,7 +235,9 @@ public class GameScreen extends ManagedScreenAdapter {
         // THE UI WILL RENDER BELOW THE MAP
         uiStage.act(delta);
 
-        orthogonalTiledMapRenderer.render();
+        int[] backgroundLayers = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
+        int [] foregroundLayers = { 19 };
+        orthogonalTiledMapRenderer.render(backgroundLayers);
 
         if (renderDebug) {
             box2dDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
@@ -249,6 +251,8 @@ public class GameScreen extends ManagedScreenAdapter {
 
         player.render(batch);
         batch.end();
+
+        orthogonalTiledMapRenderer.render(foregroundLayers);
 
         uiStage.draw();
     }

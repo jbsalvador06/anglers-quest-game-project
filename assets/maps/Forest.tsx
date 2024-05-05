@@ -779,6 +779,51 @@
    <frame tileid="449" duration="750"/>
   </animation>
  </tile>
+ <tile id="439">
+  <animation>
+   <frame tileid="439" duration="333"/>
+   <frame tileid="464" duration="333"/>
+   <frame tileid="489" duration="333"/>
+  </animation>
+ </tile>
+ <tile id="440">
+  <animation>
+   <frame tileid="440" duration="333"/>
+   <frame tileid="465" duration="333"/>
+   <frame tileid="490" duration="333"/>
+  </animation>
+ </tile>
+ <tile id="441">
+  <animation>
+   <frame tileid="441" duration="333"/>
+   <frame tileid="466" duration="333"/>
+   <frame tileid="491" duration="333"/>
+  </animation>
+ </tile>
+ <tile id="442">
+  <animation>
+   <frame tileid="442" duration="250"/>
+   <frame tileid="467" duration="250"/>
+   <frame tileid="492" duration="250"/>
+   <frame tileid="417" duration="250"/>
+  </animation>
+ </tile>
+ <tile id="443">
+  <animation>
+   <frame tileid="443" duration="250"/>
+   <frame tileid="468" duration="250"/>
+   <frame tileid="493" duration="250"/>
+   <frame tileid="418" duration="250"/>
+  </animation>
+ </tile>
+ <tile id="444">
+  <animation>
+   <frame tileid="444" duration="250"/>
+   <frame tileid="469" duration="250"/>
+   <frame tileid="494" duration="250"/>
+   <frame tileid="419" duration="250"/>
+  </animation>
+ </tile>
  <wangsets>
   <wangset name="Water edge" type="corner" tile="-1">
    <wangcolor name="" color="#ff0000" tile="-1" probability="1"/>

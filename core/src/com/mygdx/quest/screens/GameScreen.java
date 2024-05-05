@@ -64,11 +64,7 @@ public class GameScreen extends ManagedScreenAdapter {
     private Map<String, Integer> upgrades;
     private boolean isShopWindowOpen = false;
     private boolean isSellWindowOpen = false;
-    private String baitPath = "assets/upgrades/bait.png";
-    private String bobberPath = "assets/upgrades/bobber.png";
-    private String fishingLinePath = "assets/upgrades/fishing-line.png";
-    private String hookPath = "assets/upgrades/hook.png";
-    private String tackleBoxPath = "assets/upgrades/tackle-box.png";
+    // CREATE UPGRADES.JSON AND UPGRADES PARSER
 
     // For UI elements
     private Stage uiStage;
@@ -521,20 +517,22 @@ public class GameScreen extends ManagedScreenAdapter {
                                 System.out.println(randomFish.getRarity());
                                 isFishingWindowOpen = true;
     
-                                game.setScreen(game.fishingScreen);
+                                game.setScreen(game.commonFishingScreen);
                                 player.addItem(randomFish);
                                 break;
                             case RARE:
                                 System.out.println(randomFish.getName());
                                 isFishingWindowOpen = true;
                                 
-                                // player.addItem(randomFish);
+                                game.setScreen(null);
+                                player.addItem(randomFish);
                                 break;
                             case LEGENDARY:
                                 System.out.println(randomFish.getName());
                                 isFishingWindowOpen = true;
     
-                                // player.addItem(randomFish);
+                                game.setScreen(null);
+                                player.addItem(randomFish);
                                 break;
     
                             default:

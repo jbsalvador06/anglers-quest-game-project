@@ -1,6 +1,5 @@
 package com.mygdx.quest.screens;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -13,7 +12,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.quest.AnglersQuest;
 
-public class FishingScreen extends ScreenAdapter{
+public class CommonFishingScreen extends ScreenAdapter{
     private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private Rectangle bar;
@@ -32,7 +31,7 @@ public class FishingScreen extends ScreenAdapter{
 
 	final AnglersQuest game;
 
-	public FishingScreen(final AnglersQuest game) {
+	public CommonFishingScreen(final AnglersQuest game) {
 		this.game = game;
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
@@ -68,7 +67,7 @@ public class FishingScreen extends ScreenAdapter{
 
 	@Override
 	public void show() {
-		System.out.println("FISHING SCREEN");
+		System.out.println("COMMON FISHING SCREEN");
 	}
 
 	@Override

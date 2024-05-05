@@ -3,16 +3,15 @@ package com.mygdx.quest;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.mygdx.quest.screens.FishingScreen;
+import com.mygdx.quest.screens.CommonFishingScreen;
 import com.mygdx.quest.screens.GameScreen;
+import com.mygdx.quest.screens.LegendaryFishingScreen;
 import com.mygdx.quest.screens.LoadingScreen;
 import com.mygdx.quest.screens.MainMenuScreen;
+import com.mygdx.quest.screens.RareFishingScreen;
 import com.mygdx.quest.screens.SplashScreen;
 
 
@@ -40,7 +39,9 @@ public class AnglersQuest extends Game {
     public GameScreen gameScreen;
     public SplashScreen splashScreen;
     public MainMenuScreen mainMenuScreen;
-    public FishingScreen fishingScreen;
+    public CommonFishingScreen commonFishingScreen;
+    public RareFishingScreen rareFishingScreen;
+    public LegendaryFishingScreen legendaryFishingScreen;
     public Object viewport;
 
 	@Override
@@ -62,7 +63,8 @@ public class AnglersQuest extends Game {
         splashScreen = new SplashScreen(INSTANCE);
         mainMenuScreen = new MainMenuScreen(INSTANCE);
         gameScreen = new GameScreen(camera, INSTANCE);
-        fishingScreen = new FishingScreen(INSTANCE);
+        commonFishingScreen = new CommonFishingScreen(INSTANCE);
+
 
 
         setScreen(loadingScreen);
@@ -78,14 +80,5 @@ public class AnglersQuest extends Game {
         mainMenuScreen.dispose();
         gameScreen.dispose();
     }
-
-    // private void initFont() {
-    //     FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("assets/fonts/PressStart2P-Regular.ttf"));
-    //     FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-    //     params.size = 34;
-    //     params.color = Color.BLACK;
-    //     font = generator.generateFont(params);
-    // }
 
 }

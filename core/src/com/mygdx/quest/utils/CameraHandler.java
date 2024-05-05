@@ -3,7 +3,6 @@ package com.mygdx.quest.utils;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.quest.AnglersQuest;
 
 public class CameraHandler {

@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+
 public class Shop {
     
     private List<Fish> playerInventory;
@@ -12,16 +16,18 @@ public class Shop {
 
     private int playerCoins;
 
-    private boolean isShopOpened = false;
+    private boolean isShopWindowOpen = false;
+    private boolean isSellWindowOpen = false;
 
     public Shop(List<Fish> playerInventory) {
         this.playerInventory = playerInventory;
         playerCoins = 0;
 
         upgrades = new HashMap<>();
-        upgrades.put("Fishing Rod", 100);
-        upgrades.put("Cooler", 250);
-        upgrades.put("Boat", 500);
+        upgrades.put("Bait", 50);
+        upgrades.put("Hook", 250);
+        upgrades.put("Bobber", 350);
+        upgrades.put("High Test Fishing Line", 500);
     }
 
     public void sellFish() {
@@ -74,6 +80,20 @@ public class Shop {
         } else {
             System.out.println("Invalid upgrade!");
         }
+    }
+
+    public Window sellWindow(Skin skin) {
+        Window window = new Window("Sell Fish", skin);
+        TextButton closeButton = new TextButton("X", skin);
+        closeButton.right();
+
+        window.add(closeButton);
+        window.setResizable(true);
+
+        window.pack();
+        window.setPosition(0, 0);
+
+        return window;
     }
 
 }

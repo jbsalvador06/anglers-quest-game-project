@@ -16,9 +16,6 @@ public class LoadingScreen extends ScreenAdapter {
 
     private ShapeRenderer shapeRenderer;
     private float progress;
-    
-    // private Stage stage;
-    // private ExtendViewport viewport;
 
     public LoadingScreen(final AnglersQuest game) {
         this.game = game;
@@ -26,8 +23,8 @@ public class LoadingScreen extends ScreenAdapter {
     }
 
     private void queueAssets() {
-        game.assets.load("assets/anglers-quest-header.png", Texture.class);
-        game.assets.load("assets/skins/quest-skin.atlas", TextureAtlas.class);
+        game.assets.load("assets/images/anglers-quest-header.png", Texture.class);
+        game.assets.load("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class);
         game.assets.load("assets/images/background.png", Texture.class);
     }
 
@@ -40,7 +37,6 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void update(float delta) {
         progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
-        // System.out.println(progress + " " + game.assets.getProgress());
 
         if (game.assets.update() && progress >= game.assets.getProgress() - 0.001f) {
             game.setScreen(game.splashScreen);
@@ -59,26 +55,12 @@ public class LoadingScreen extends ScreenAdapter {
 
         shapeRenderer.begin(ShapeType.Filled);
 
-        // float rectWidth = game.camera.viewportWidth / 3;
-        // float rectHeight = 32;
-        // float centerX = (game.camera.viewportWidth - rectWidth) / 2;
-        // float rectY = game.camera.viewportHeight / 3;
-
         shapeRenderer.setColor(Color.FOREST);
         shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, game.camera.viewportWidth - 64, 16);
 
         shapeRenderer.setColor(Color.WHITE);
         shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
         shapeRenderer.end();
-
-        // shapeRenderer.setColor(Color.FOREST);
-        // shapeRenderer.rect(centerX, rectY, rectWidth, rectHeight);
-
-        // float progressWidth = progress * rectWidth;
-
-        // shapeRenderer.setColor(Color.WHITE);
-        // shapeRenderer.rect(centerX, rectY, progressWidth, rectHeight);
-        // shapeRenderer.end();
     }
 
     @Override

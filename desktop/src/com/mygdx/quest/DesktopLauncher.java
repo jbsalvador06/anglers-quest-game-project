@@ -13,7 +13,8 @@ public class DesktopLauncher {
 		config.setWindowedMode(1280, 720);
 		// config.setResizable(false);
 		config.setForegroundFPS(60);
-		config.setWindowIcon(FileType.Internal, "assets/anglers-quest-icon.png");
+		config.useVsync(true);
+		config.setWindowIcon(FileType.Internal, "assets/images/anglers-quest-icon.png");
 		// config.setFullscreenMode(Lwjgl3ApplicationConfiguration.getDisplayMode());
 		
 		new Lwjgl3Application(new AnglersQuest(), config);

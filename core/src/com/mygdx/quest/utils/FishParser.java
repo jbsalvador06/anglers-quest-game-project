@@ -3,6 +3,7 @@ package com.mygdx.quest.utils;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,10 +31,11 @@ public class FishParser {
                 Rarity rarity = Rarity.valueOf((String) fishObj.get("rarity"));
                 Number num = (Number) fishObj.get("weight");
                 float weight = num.floatValue();
+                String imgUrl = (String) fishObj.get("imgUrl");
                 // Number num2 = (Number) fishObj.get("price");
                 // int price = num2.intValue();
 
-                Fish fish = new Fish(name, description, location, rarity, weight);
+                Fish fish = new Fish(name, description, location, rarity, weight, imgUrl);
                 fishMap.put(name, fish);
         }
 
@@ -42,5 +44,11 @@ public class FishParser {
         }
 
         return fishMap;
+    }
+
+    public static Fish getRandomFish(Map<String, Fish> fishMap) {
+        Random rand = new Random();
+        int randomIndex = rand.nextInt(fishMap.size());
+        return (Fish) fishMap.values().toArray()[randomIndex];
     }
 }

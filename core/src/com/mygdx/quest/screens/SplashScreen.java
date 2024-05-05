@@ -8,7 +8,6 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -40,7 +39,7 @@ public class SplashScreen extends ScreenAdapter {
             }
         };
 
-        Texture splashTexture = game.assets.get("assets/anglers-quest-header.png", Texture.class);
+        Texture splashTexture = game.assets.get("assets/images/anglers-quest-header.png", Texture.class);
         splashImg = new Image(splashTexture);
         splashImg.setPosition(stage.getWidth() / 2 - splashImg.getWidth() / 2, stage.getHeight() / 2 - splashImg.getHeight() / 2);
 

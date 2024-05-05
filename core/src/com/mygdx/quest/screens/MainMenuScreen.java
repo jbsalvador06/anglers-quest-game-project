@@ -29,8 +29,9 @@ public class MainMenuScreen extends ScreenAdapter {
     private Skin skin;
     private Stage stage;
     private Image background;
+    private Image splashImg;
 
-    private TextButton playButton, creditsButton, exitButton;
+    private TextButton playButton, exitButton;
 
     public MainMenuScreen(final AnglersQuest game) {
         this.game = game;
@@ -51,8 +52,8 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.addActor(background);
 
         this.skin = new Skin();
-        this.skin.addRegions(game.assets.get("assets/skins/quest-skin.atlas", TextureAtlas.class));
-        this.skin.load(Gdx.files.internal("assets/skins/quest-skin.json"));
+        this.skin.addRegions(game.assets.get("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class));
+        this.skin.load(Gdx.files.internal("assets/skins/old-skins/quest-skin.json"));
 
         initButton();
     }
@@ -79,6 +80,9 @@ public class MainMenuScreen extends ScreenAdapter {
         int buttonWidth = AnglersQuest.V_WIDTH / 8;
         int buttonHeight = AnglersQuest.V_HEIGHT / 8;
 
+        Texture splashTexture = game.assets.get("assets/images/anglers-quest-header.png", Texture.class);
+        splashImg = new Image(splashTexture);
+        splashImg.setPosition(stage.getWidth() / 2 - splashImg.getWidth() / 2, stage.getHeight() / 2 - splashImg.getHeight() / 2);
 
         playButton = new TextButton("Play", skin, "default");
         playButton.setSize(200, 80);
@@ -96,17 +100,6 @@ public class MainMenuScreen extends ScreenAdapter {
                 game.setScreen(game.gameScreen);
             }
         });
-
-        creditsButton = new TextButton("Credits", skin, "default");
-        creditsButton.setSize(200, 80);
-        creditsButton.addAction(
-            sequence(
-                alpha(0),
-                parallel(
-                    fadeIn(0.5f),
-                    moveBy(0, -20, .5f, Interpolation.pow5Out)
-                )
-            ));
 
         exitButton = new TextButton("Exit", skin, "default");
         exitButton.setSize(200, 80);
@@ -128,8 +121,8 @@ public class MainMenuScreen extends ScreenAdapter {
         Table table  = new Table();
         table.setFillParent(true);
         table.center();
+        table.add(splashImg).pad(10);
         table.add(playButton).pad(10).width(buttonWidth).height(buttonHeight);
-        table.add(creditsButton).pad(10).width(buttonWidth).height(buttonHeight);
         table.add(exitButton).pad(10).width(buttonWidth).height(buttonHeight);
 
         stage.addActor(table);

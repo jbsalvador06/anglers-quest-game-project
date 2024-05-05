@@ -44,19 +44,20 @@ public class Player extends GameEntity{
         Player.body = body;
         
         // Animation
-        this.atlas = new TextureAtlas("assets/player/new-player/playerMove.atlas");
-        this.upStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile010"));
-        this.downStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile002"));
-        this.leftStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile012"));
-        this.rightStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile004"));
-        this.walkUp = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile009"));
-        this.walkDown = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile003"));
-        this.walkLeft = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile013"));
-        this.walkRight = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("tile005"));
+        this.atlas = new TextureAtlas("assets/player/new-new-player/playerMove.atlas");
+        this.upStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("up-still"));
+        this.downStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("down-still"));
+        this.leftStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("left-still"));
+        this.rightStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("right-still"));
+        this.walkUp = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("up-walk"));
+        this.walkDown = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("down-walk"));
+        this.walkLeft = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("left-walk"));
+        this.walkRight = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("right-walk"));
 
         inventory = new ArrayList<>();
 
         footSteps = Gdx.audio.newSound(Gdx.files.internal("sounds/walkSFX.mp3"));
+        footSteps.setVolume(footStepsID, 0.1f);
         
         body.getFixtureList().first().setUserData(this);
 

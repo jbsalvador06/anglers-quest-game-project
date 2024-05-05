@@ -346,6 +346,41 @@ public class GameScreen extends ManagedScreenAdapter {
             resizedTexture.setMinHeight(100);
             ImageButton upgradesButton = new ImageButton(skin);
 
+            upgradesButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (player.getCoins() >= upgradePrice) {
+                        upgrades.remove(upgradeName);
+                        upgradesButton.remove();
+                    } else {
+                        if (!isPopupOpen) {
+                            System.out.println("POPUP");
+                            isPopupOpen = true;
+                            shopWindow.remove();
+                            isShopWindowOpen = false;
+                            Window popup = new Window("", skin);
+                            TextButton okayButton = new TextButton("Okay!", skin);
+                            
+                            okayButton.addListener(new ClickListener() {
+                                @Override
+                                public void clicked(InputEvent event, float x, float y) {
+                                    popup.remove();
+                                    isPopupOpen = false;
+                                }
+                            });
+                            Label label = new Label("Not enough coins!", skin);
+
+                            popup.add(label);
+                            popup.row();
+                            popup.add(okayButton);
+                            popup.pack();
+                            popup.setPosition(game.widthScreen / 2 - popup.getWidth() / 2, game.heightScreen / 2 - popup.getHeight() / 2);
+                            uiStage.addActor(popup);
+                        }
+                    }
+                }
+            });
+
             shopWindow.add(upgradesButton).pad(5);
             count++;
 
@@ -540,6 +575,7 @@ public class GameScreen extends ManagedScreenAdapter {
                             popup.row();
                             popup.add(okayButton);
                             popup.pack();
+                            popup.setPosition(game.widthScreen / 2 - popup.getWidth() / 2, game.heightScreen / 2 - popup.getHeight() / 2);
                             uiStage.addActor(popup);
                         }
                     }

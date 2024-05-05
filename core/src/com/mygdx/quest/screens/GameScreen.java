@@ -174,7 +174,7 @@ public class GameScreen extends ManagedScreenAdapter {
 
     private void cameraUpdate(float delta) {
         camera.zoom = Constants.zoom;
-        CameraHandler.lockOnTarget(camera, player.getBody().getPosition().scl(Constants.PPM));
+        CameraHandler.lockOnTarget(camera, player.getBody().getPosition());
         // CameraHandler.freeRoam(camera, player.getBody().getPosition());
         // CameraHandler.limitCamera(camera,
         // player.getBody().getPosition().scl(Constants.PPM), mapWidth, mapHeight);
@@ -256,7 +256,8 @@ public class GameScreen extends ManagedScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-
+        game.widthScreen = width;
+        game.heightScreen = height;
         // For UI elements
         uiStage.getViewport().update(width, height, true);
     }

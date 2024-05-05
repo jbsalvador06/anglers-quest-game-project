@@ -8,10 +8,18 @@ import com.mygdx.quest.AnglersQuest;
 
 public class CameraHandler {
     
+    // public static void lockOnTarget(Camera camera, Vector2 target) {
+    //     Vector3 position = camera.position;
+    //     position.x = target.x;
+    //     position.y = target.y;
+    //     camera.position.set(position);
+    //     camera.update();
+    // }
+
     public static void lockOnTarget(Camera camera, Vector2 target) {
         Vector3 position = camera.position;
-        position.x = target.x;
-        position.y = target.y;
+        position.x = Math.round(target.x * Constants.PPM * 10) / 10f;
+        position.y = Math.round(target.y * Constants.PPM * 10) / 10f;
         camera.position.set(position);
         camera.update();
     }

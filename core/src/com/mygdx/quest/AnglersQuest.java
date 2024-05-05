@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.quest.screens.FishingScreen;
 import com.mygdx.quest.screens.GameScreen;
 import com.mygdx.quest.screens.LoadingScreen;
 import com.mygdx.quest.screens.MainMenuScreen;
@@ -39,6 +40,7 @@ public class AnglersQuest extends Game {
     public GameScreen gameScreen;
     public SplashScreen splashScreen;
     public MainMenuScreen mainMenuScreen;
+    public FishingScreen fishingScreen;
     public Object viewport;
 
 	@Override
@@ -60,6 +62,7 @@ public class AnglersQuest extends Game {
         splashScreen = new SplashScreen(INSTANCE);
         mainMenuScreen = new MainMenuScreen(INSTANCE);
         gameScreen = new GameScreen(camera, INSTANCE);
+        fishingScreen = new FishingScreen(INSTANCE);
 
 
         setScreen(loadingScreen);

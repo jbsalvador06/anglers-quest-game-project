@@ -5,12 +5,19 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.quest.AnglersQuest;
+import com.mygdx.quest.utils.Fish;
+import com.mygdx.quest.utils.Fish.Rarity;
 
 public class CommonFishingScreen extends ScreenAdapter{
     private OrthographicCamera camera;
@@ -29,18 +36,32 @@ public class CommonFishingScreen extends ScreenAdapter{
 	private SpriteBatch batch;
 	private float fishingTimer;
 
-	final AnglersQuest game;
+	private Image background;
+	private Stage stage;
 
-	public CommonFishingScreen(final AnglersQuest game) {
+	final AnglersQuest game;
+	float barHeight;
+
+
+	public CommonFishingScreen(final AnglersQuest game, Fish fishItem) {
 		this.game = game;
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
+
+		this.stage = new Stage(new ExtendViewport(AnglersQuest.V_WIDTH, AnglersQuest.V_HEIGHT, game.camera));
 
 		shapeRenderer = new ShapeRenderer();
 
 		// moving/main bar
 		float barWidth = 23;
-		float barHeight = 90;
+		// float barHeight = 90;
+		if (fishItem.getRarity() == Rarity.COMMON) {
+			barHeight = 90;
+		} else if (fishItem.getRarity() == Rarity.RARE) {
+			barHeight = 45;
+		} else if (fishItem.getRarity() == Rarity.LEGENDARY) {
+			barHeight = 20;
+		}
 		float barX = 400 - barWidth / 2;
 		float barY = 40;
 		bar = new Rectangle(barX, barY, barWidth, barHeight);
@@ -68,6 +89,15 @@ public class CommonFishingScreen extends ScreenAdapter{
 	@Override
 	public void show() {
 		System.out.println("COMMON FISHING SCREEN");
+
+		Texture bgTexture = game.assets.get("assets/images/underwater.png");
+
+        background = new Image(bgTexture);
+        background.setFillParent(true);
+		background.setPosition(game.widthScreen / 2 - bgTexture.getWidth() / 2, game.heightScreen / 2 - bgTexture.getHeight() / 2);
+
+		stage.clear();
+		stage.addActor(background);
 	}
 
 	@Override
@@ -82,6 +112,10 @@ public class CommonFishingScreen extends ScreenAdapter{
 
 		camera.update();
 
+
+		stage.act();
+		stage.draw();
+		
 		shapeRenderer.setProjectionMatrix(camera.combined);
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -192,7 +226,13 @@ public class CommonFishingScreen extends ScreenAdapter{
 		// Draw time text on the screen
 		batch.begin();
 		font.draw(batch, timeText, 10, Gdx.graphics.getHeight() - 10);
+		font.getData().setScale(5);
 		batch.end();
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
@@ -200,5 +240,6 @@ public class CommonFishingScreen extends ScreenAdapter{
 		shapeRenderer.dispose();
 		font.dispose();
 		batch.dispose();
+		stage.dispose();
 	}
 }

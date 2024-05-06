@@ -52,8 +52,8 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.addActor(background);
 
         this.skin = new Skin();
-        this.skin.addRegions(game.assets.get("assets/skins/flat-earth-ui.atlas", TextureAtlas.class));
-        this.skin.load(Gdx.files.internal("assets/skins/flat-earth-ui.json"));
+        this.skin.addRegions(game.assets.get("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class));
+        this.skin.load(Gdx.files.internal("assets/skins/old-skins/quest-skin.json"));
 
         initButton();
     }

@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
+import com.mygdx.quest.entities.River;
 import com.mygdx.quest.screens.GameScreen;
 
 public class TileMapHelper {
@@ -68,6 +69,18 @@ public class TileMapHelper {
                         gameScreen.getWorld()
                     );
                     gameScreen.setPond(new Pond(rectangle.getWidth(), rectangle.getHeight(), body));
+                }
+
+                if (rectangleName.equals("River")) {
+                    Body body = BodyHelper.createBody(
+                        rectangle.getX() + rectangle.getWidth() / 2,
+                        rectangle.getY() + rectangle.getHeight() / 2,
+                        rectangle.getWidth(),
+                        rectangle.getHeight(),
+                        true,
+                        gameScreen.getWorld()
+                    );
+                    gameScreen.setRiver(new River(rectangle.getWidth(), rectangle.getHeight(), body));
                 }
             }
         }

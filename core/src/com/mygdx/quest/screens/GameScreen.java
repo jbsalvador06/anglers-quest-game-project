@@ -46,6 +46,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
+import com.mygdx.quest.entities.River;
 import com.mygdx.quest.utils.CameraHandler;
 import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
@@ -98,6 +99,8 @@ public class GameScreen extends ManagedScreenAdapter {
     private Player player;
     private Pond pond;
     private boolean pondKey = false;
+    private River river;
+    private boolean riverKey = false;
     float elapsedTime = 0.0f;
     private boolean isInventoryWindowOpen = false;
 
@@ -185,8 +188,8 @@ public class GameScreen extends ManagedScreenAdapter {
 
         // For UI elements
         this.skin = new Skin();
-        this.skin.addRegions(game.assets.get("assets/skins/flat-earth-ui.atlas", TextureAtlas.class));
-        this.skin.load(Gdx.files.internal("assets/skins/flat-earth-ui.json"));
+        this.skin.addRegions(game.assets.get("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class));
+        this.skin.load(Gdx.files.internal("assets/skins/old-skins/quest-skin.json"));
 
         shopButton = new TextButton("Shop", skin);
         sellButton = new TextButton("Sell", skin);
@@ -305,6 +308,7 @@ public class GameScreen extends ManagedScreenAdapter {
         });
 
         int count = 0;
+        Label coins = new Label("Coins: " + player.getCoins(), skin);
 
         for (Map.Entry<String, Integer> entry : upgrades.entrySet()) {
             String upgradeName = entry.getKey();
@@ -325,7 +329,9 @@ public class GameScreen extends ManagedScreenAdapter {
                     new TextureRegion(upgradesTexture, 0, 0, upgradesTexture.getWidth(), upgradesTexture.getHeight()));
             resizedTexture.setMinWidth(100);
             resizedTexture.setMinHeight(100);
-            ImageButton upgradesButton = new ImageButton(skin);
+            ImageButton upgradesButton = new ImageButton(resizedTexture);
+
+            upgradesButton.addListener(new TextTooltip("Name: " + upgradeName + "\nPrice: " + upgradePrice, skin));
 
             upgradesButton.addListener(new ClickListener() {
                 @Override
@@ -333,6 +339,7 @@ public class GameScreen extends ManagedScreenAdapter {
                     if (player.getCoins() >= upgradePrice) {
                         upgrades.remove(upgradeName);
                         upgradesButton.remove();
+                        player.addUpgrades(upgradeName);
                     } else {
                         if (!isPopupOpen) {
                             System.out.println("POPUP");
@@ -365,13 +372,15 @@ public class GameScreen extends ManagedScreenAdapter {
             shopWindow.add(upgradesButton).pad(5);
             count++;
 
-            if (count % 2 == 0) {
+            if (count % 3 == 0) {
                 shopWindow.row();
             }
         }
 
+        shopWindow.add(coins);
         shopWindow.row();
-        shopWindow.add(closeButton).colspan(2);
+        shopWindow.row();
+        shopWindow.add(closeButton).colspan(3);
         shopWindow.pack();
         shopWindow.setPosition(game.widthScreen / 2 - shopWindow.getWidth() / 2,
                 game.heightScreen / 2 - shopWindow.getHeight() / 2);
@@ -379,7 +388,7 @@ public class GameScreen extends ManagedScreenAdapter {
     }
 
     private void initInventoryUI() {
-        Window inventoryWindow = new Window("Inventory", skin);
+        Window inventoryWindow = new Window("Inventory", skin, "dialog");
         TextButton closeButton = new TextButton("Close", skin);
         closeButton.addListener(new ClickListener() {
             @Override
@@ -392,6 +401,7 @@ public class GameScreen extends ManagedScreenAdapter {
 
         Table inventoryTable = new Table();
         inventoryTable.pad(10);
+        Label coins = new Label("Coins: " + player.getCoins(), skin);
 
         if (!player.getInventory().isEmpty()) {
             int count = 0;
@@ -417,6 +427,34 @@ public class GameScreen extends ManagedScreenAdapter {
             inventoryTable.add(noItemsLabel);
         }
 
+        inventoryTable.row();
+
+        if (!player.getUpgrades().isEmpty()) {
+            int count = 0;
+            for (String upgrade : player.getUpgrades()) {
+                Texture upgradesTexture = new Texture(Gdx.files.internal("assets/upgrades/" + upgrade.toLowerCase() + ".png"));
+
+                TextureRegionDrawable resizedTexture = new TextureRegionDrawable(
+                        new TextureRegion(upgradesTexture, 0, 0, upgradesTexture.getWidth(), upgradesTexture.getHeight()));
+                resizedTexture.setMinWidth(100);
+                resizedTexture.setMinHeight(100);
+                ImageButton fishButton = new ImageButton(resizedTexture);
+                inventoryTable.add(fishButton).pad(5);
+                count++;
+
+                fishButton.addListener(new TextTooltip("Name: " + upgrade, skin));
+
+                if (count % 3 == 0) {
+                    inventoryTable.row();
+                }
+            }
+        } else {
+            Label noCollectiblesLabel = new Label("Collectibles is empty :(", skin);
+            inventoryTable.add(noCollectiblesLabel);
+        }
+
+        inventoryWindow.add(coins);
+        inventoryWindow.row();
         inventoryWindow.add(inventoryTable).row();
         inventoryWindow.add(closeButton).colspan(3);
         inventoryWindow.pack();
@@ -440,6 +478,7 @@ public class GameScreen extends ManagedScreenAdapter {
         Table inventoryTable = new Table();
         inventoryTable.pad(10);
 
+        Label coins = new Label("Coins: " + player.getCoins(), skin);
         player.sortInventory();
         if (!player.getInventory().isEmpty()) {
             int count = 0;
@@ -473,6 +512,8 @@ public class GameScreen extends ManagedScreenAdapter {
             inventoryTable.add(noItemsLabel);
         }
 
+        sellWindow.add(coins);
+        sellWindow.row();
         sellWindow.add(inventoryTable).row();
         sellWindow.add(closeButton).colspan(3);
         sellWindow.pack();
@@ -493,6 +534,10 @@ public class GameScreen extends ManagedScreenAdapter {
         this.pond = pond;
     }
 
+    public void setRiver(River river) {
+        this.river = river;
+    }
+
     @Override
     public void pause() {
         System.out.println("GameScreen Paused");
@@ -500,8 +545,9 @@ public class GameScreen extends ManagedScreenAdapter {
 
     private void handleItemInteraction() {
         if (Gdx.input.isKeyJustPressed(Keys.E)) {
-            if (contactListener.pondInteract) {
+            if (contactListener.pondInteract || contactListener.riverInteract) {
                 pondKey = true;
+                riverKey = true;
                 elapsedTime = 0.0f;
 
                 Map<String, Fish> fishes = FishParser.parseFishJson("core/src/com/mygdx/quest/utils/fish.json");
@@ -517,21 +563,21 @@ public class GameScreen extends ManagedScreenAdapter {
                                 System.out.println(randomFish.getRarity());
                                 isFishingWindowOpen = true;
     
-                                game.setScreen(game.commonFishingScreen);
+                                game.setScreen(new CommonFishingScreen(game, randomFish));
                                 player.addItem(randomFish);
                                 break;
                             case RARE:
                                 System.out.println(randomFish.getName());
                                 isFishingWindowOpen = true;
                                 
-                                game.setScreen(null);
+                                game.setScreen(new CommonFishingScreen(game, randomFish));
                                 player.addItem(randomFish);
                                 break;
                             case LEGENDARY:
                                 System.out.println(randomFish.getName());
                                 isFishingWindowOpen = true;
     
-                                game.setScreen(null);
+                                game.setScreen(new CommonFishingScreen(game, randomFish));
                                 player.addItem(randomFish);
                                 break;
     

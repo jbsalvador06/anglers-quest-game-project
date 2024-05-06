@@ -27,6 +27,7 @@ public class Player extends GameEntity{
     private Direction lastDirection = Direction.DOWN;
 
     private ArrayList<Fish> inventory;
+    private ArrayList<String> upgradesInventory;
     private int coins;
     
     public static Body body;
@@ -55,6 +56,7 @@ public class Player extends GameEntity{
         this.walkRight = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("right-walk"));
 
         inventory = new ArrayList<>();
+        upgradesInventory = new ArrayList<>();
 
         footSteps = Gdx.audio.newSound(Gdx.files.internal("sounds/walkSFX.mp3"));
         footSteps.setVolume(footStepsID, 0.1f);
@@ -202,6 +204,14 @@ public class Player extends GameEntity{
 
     public ArrayList<Fish> getInventory() {
         return inventory;
+    }
+
+    public void addUpgrades(String name) {
+        upgradesInventory.add(name);
+    }
+
+    public ArrayList<String> getUpgrades() {
+        return upgradesInventory;
     }
     
     public void sortInventory() {

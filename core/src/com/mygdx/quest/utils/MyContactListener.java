@@ -7,10 +7,12 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
+import com.mygdx.quest.entities.River;
 
 public class MyContactListener implements ContactListener {
     
     public boolean pondInteract = false;
+    public boolean riverInteract = false;
 
     @Override
     public void beginContact(Contact contact) {
@@ -30,6 +32,21 @@ public class MyContactListener implements ContactListener {
 
             pondInteract = true;
             System.out.println(pondInteract);
+        }
+
+        if ((fa.getUserData() instanceof Player && fb.getUserData() instanceof River) ||
+            (fa.getUserData() instanceof River && fb.getUserData() instanceof Player)) {
+            
+            // Pond's body
+            Fixture itemFixture = fa.getUserData() instanceof River ? fa : fb;
+            itemFixture.getUserData();
+            
+            System.out.println("Detected player-river contact");
+            System.out.println(fa.getUserData());
+            System.out.println(fb.getUserData());
+
+            pondInteract = true;
+            System.out.println(riverInteract);
         }
     }
 

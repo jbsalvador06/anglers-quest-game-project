@@ -24,8 +24,9 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void queueAssets() {
         game.assets.load("assets/images/anglers-quest-header.png", Texture.class);
-        game.assets.load("assets/skins/flat-earth-ui.atlas", TextureAtlas.class);
+        game.assets.load("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class);
         game.assets.load("assets/images/background.png", Texture.class);
+        game.assets.load("assets/images/underwater.png", Texture.class);
     }
 
     @Override

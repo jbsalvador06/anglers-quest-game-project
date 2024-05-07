@@ -1,6 +1,7 @@
 package com.mygdx.quest.utils;
 
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -26,14 +27,14 @@ public class FishParser {
                 JSONObject fishObj = (JSONObject) fishObject;
     
                 String name = (String) fishObj.get("name");
-                String description = (String) fishObj.get("description");
+                String description1 = (String) fishObj.get("description1");
+                String description2 = (String) fishObj.get("description2");
+                String description = (String) description1 + "\n" + description2;
                 String location = (String) fishObj.get("location");
                 Rarity rarity = Rarity.valueOf((String) fishObj.get("rarity"));
                 Number num = (Number) fishObj.get("weight");
                 float weight = num.floatValue();
                 String imgUrl = (String) fishObj.get("imgUrl");
-                // Number num2 = (Number) fishObj.get("price");
-                // int price = num2.intValue();
 
                 Fish fish = new Fish(name, description, location, rarity, weight, imgUrl);
                 fishMap.put(name, fish);
@@ -50,5 +51,17 @@ public class FishParser {
         Random rand = new Random();
         int randomIndex = rand.nextInt(fishMap.size());
         return (Fish) fishMap.values().toArray()[randomIndex];
+    }
+
+    public static Fish getRandomCommonFish(Map<String, Fish> fishMap) {
+        Random rand = new Random();
+        ArrayList<Fish> commonFish = new ArrayList<>();
+        for (Fish fish : fishMap.values()) {
+            if (fish.getRarity() == Rarity.COMMON) {
+                commonFish.add(fish);
+            }
+        }
+        int randomIndex = rand.nextInt(commonFish.size());
+        return (Fish) commonFish.toArray()[randomIndex];
     }
 }

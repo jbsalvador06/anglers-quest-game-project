@@ -1,7 +1,8 @@
 [
     {
         "name": "Large Mouth Bass",
-        "description": "Dark olive green on the back with light green sides shading to a white belly.",
+        "description1": "Dark olive green on the back with light green",
+        "description2": "sides shading to a white belly.",
         "location": "Lake",
         "rarity": "COMMON",
         "weight": 24,
@@ -9,7 +10,8 @@
     },
     {
         "name": "Walleye",
-        "description": "Primarily gold and olive in color, with a white belly.",
+        "description1": "Primarily gold and olive in color,",
+        "description2": "with a white belly.",
         "location": "Lake",
         "rarity": "COMMON",
         "weight": 31,
@@ -17,23 +19,17 @@
     },
     {
         "name": "Trout",
-        "description": "Trout have fins entirely without spines, and all of them have a small adipose fin along the back, near the tail.",
+        "description1": "Trout have fins entirely without spines, and all of them",
+        "description2": "have a small adipose fin along the back, near the tail.",
         "location": "Lake",
         "rarity": "RARE",
         "weight": 22,
         "imgUrl": "assets/fish/trout.png"
     },
     {
-        "name": "Trout",
-        "description": "Trout have fins entirely without spines, and all of them have a small adipose fin along the back, near the tail.",
-        "location": "Lake",
-        "rarity": "RARE",
-        "weight": 56,
-        "imgUrl": "assets/fish/trout.png"
-    },
-    {
         "name": "Crappie",
-        "description": "Usually silvery-gray to green in color and show irregular or mottled black splotches over the entire body.",
+        "description1": "Usually silvery-gray to green in color and show irregular",
+        "description2": "or mottled black splotches over the entire body.",
         "location": "Lake",
         "rarity": "LEGENDARY",
         "weight": 79,
@@ -41,7 +37,8 @@
     },
     {
         "name": "Seabass",
-        "description": "An elongated body shape, large head and mouth, tight scales, and a broad, fork-less tail.",
+        "description1": "An elongated body shape, large head and mouth,",
+        "description2": "tight scales, and a broad, fork-less tail.",
         "location": "Pond",
         "rarity": "COMMON",
         "weight": 69,
@@ -49,7 +46,8 @@
     },
     {
         "name": "Goldfish",
-        "description": "Have two sets of paired fins and three sets of single fins.",
+        "description1": "Have two sets of paired fins and.",
+        "description2": "three sets of single fins",
         "location": "Pond",
         "rarity": "COMMON",
         "weight": 14,
@@ -57,7 +55,8 @@
     },
     {
         "name": "Comet",
-        "description": "They have a long, flowing, forked tail and are gold or orange in color, and can sometimes have black markings.",
+        "description1": "They have a long, flowing, forked tail and are gold",
+        "description2": "or orange in color, and can sometimes have black markings.",
         "location": "Pond",
         "rarity": "COMMON",
         "weight": 63,
@@ -65,7 +64,8 @@
     },
     {
         "name": "Oranda",
-        "description": "A breed of goldfish characterized by a prominent bubble-like hood on the head.",
+        "description1": "A breed of goldfish characterized by a prominent",
+        "description2": "bubble-like hood on the head.",
         "location": "Pond",
         "rarity": "RARE",
         "weight": 33,
@@ -73,7 +73,8 @@
     },
     {
         "name": "Shubunkin",
-        "description": "Are a straight tailed, iridescent scaled goldfish",
+        "description1": "Are a straight tailed,",
+        "description2": "iridescent scaled goldfish",
         "location": "Pond",
         "rarity": "RARE",
         "weight": 48,
@@ -81,7 +82,8 @@
     },
     {
         "name": "Mosquito Fish",
-        "description": "Small in comparison to many other freshwater fish",
+        "description1": "Small in comparison to many",
+        "description2": "other freshwater fish",
         "location": "Pond",
         "rarity": "RARE",
         "weight": 61,
@@ -89,7 +91,8 @@
     },
     {
         "name": "Sunfish",
-        "description": "from the family Molidae and are the largest bony fish in the world.",
+        "description1": "From the family Molidae and are",
+        "description2": "the largest bony fish in the world.",
         "location": "Pond",
         "rarity": "LEGENDARY",
         "weight": 41,
@@ -97,7 +100,8 @@
     },
     {
         "name": "Catfish",
-        "description": "Their whisker-like barbels, which are located on the nose, each side of the mouth, and on the chin.",
+        "description1": "Their whisker-like barbels, which are located on",
+        "description2": "the nose, each side of the mouth, and on the chin.",
         "location": "Pond",
         "rarity": "LEGENDARY",
         "weight": 87,
@@ -105,7 +109,8 @@
     },
     {
         "name": "Koi",
-        "description": "Colorful, ornamental versions of the common carp.",
+        "description1": "Colorful, ornamental versions",
+        "description2": "of the common carp.",
         "location": "Pond",
         "rarity": "LEGENDARY",
         "weight": 94,

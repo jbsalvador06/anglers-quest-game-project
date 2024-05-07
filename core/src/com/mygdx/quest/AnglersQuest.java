@@ -6,12 +6,10 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.quest.screens.CommonFishingScreen;
+import com.mygdx.quest.screens.FishingScreen;
 import com.mygdx.quest.screens.GameScreen;
-import com.mygdx.quest.screens.LegendaryFishingScreen;
 import com.mygdx.quest.screens.LoadingScreen;
 import com.mygdx.quest.screens.MainMenuScreen;
-import com.mygdx.quest.screens.RareFishingScreen;
 import com.mygdx.quest.screens.SplashScreen;
 
 
@@ -39,9 +37,7 @@ public class AnglersQuest extends Game {
     public GameScreen gameScreen;
     public SplashScreen splashScreen;
     public MainMenuScreen mainMenuScreen;
-    public CommonFishingScreen commonFishingScreen;
-    public RareFishingScreen rareFishingScreen;
-    public LegendaryFishingScreen legendaryFishingScreen;
+    public FishingScreen commonFishingScreen;
     public Object viewport;
 
 	@Override

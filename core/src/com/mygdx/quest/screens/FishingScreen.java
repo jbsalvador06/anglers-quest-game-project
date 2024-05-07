@@ -16,10 +16,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.quest.AnglersQuest;
+import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.utils.Fish;
 import com.mygdx.quest.utils.Fish.Rarity;
 
-public class CommonFishingScreen extends ScreenAdapter{
+public class FishingScreen extends ScreenAdapter{
     private OrthographicCamera camera;
 	private ShapeRenderer shapeRenderer;
 	private Rectangle bar;
@@ -36,17 +37,29 @@ public class CommonFishingScreen extends ScreenAdapter{
 	private SpriteBatch batch;
 	private float fishingTimer;
 
+	private BitmapFont descFont;
+
 	private Image background;
 	private Stage stage;
 
 	private Sound reelingSFX;
 
 	private float elapsedTime;
-	private float timeLimit = 15f;
+	private static float timeLimit;
 	private Fish fishItem;
 
 	final AnglersQuest game;
 	float barHeight;
+	float speed;
+	float fishSpeed;
+
+	// Upgrades
+	Player player;
+	private boolean hasBait;
+	private boolean hasHook;
+	private boolean hasTackleBox;
+	private boolean hasBobber;
+	private boolean hasFishingLine;
 
 	public interface FishingCallback {
 		void onFishingCompleted(boolean isFishCaught, Fish fish);
@@ -54,10 +67,31 @@ public class CommonFishingScreen extends ScreenAdapter{
 
 	private FishingCallback fishingCallback;
 
-	public CommonFishingScreen(final AnglersQuest game, Fish fishItem, FishingCallback fishingCallback) {
+	public FishingScreen(final AnglersQuest game, Fish fishItem, FishingCallback fishingCallback, Player player) {
 		this.game = game;
 		this.fishingCallback = fishingCallback;
 		this.fishItem = fishItem;
+		this.player = player;
+
+		// Check if the player has the upgrades
+		hasBait = player.getUpgrades().contains("Bait");
+		hasHook = player.getUpgrades().contains("Hook");
+		hasTackleBox = player.getUpgrades().contains("Tackle-Box");
+		hasBobber = player.getUpgrades().contains("Bobber");
+		hasFishingLine = player.getUpgrades().contains("Fishing-Line");
+		
+		if (fishItem.getRarity() == Rarity.COMMON) {
+			timeLimit = 15f;
+		} else if (fishItem.getRarity() == Rarity.RARE) {
+			timeLimit = 20f;
+		} else if (fishItem.getRarity() == Rarity.LEGENDARY) {
+			timeLimit = 25f;
+		}
+
+		// Apply upgrades
+		if (hasTackleBox) {
+			timeLimit += 5f;
+		}
 
 		// Fail check
 		elapsedTime = 0f;
@@ -79,8 +113,17 @@ public class CommonFishingScreen extends ScreenAdapter{
 		} else if (fishItem.getRarity() == Rarity.RARE) {
 			barHeight = 45;
 		} else if (fishItem.getRarity() == Rarity.LEGENDARY) {
-			barHeight = 20;
+			barHeight = 30;
 		}
+
+		// Apply upgrades
+		if (hasBait) {
+			barHeight += 10;
+		}
+		if (hasBobber) {
+			barHeight += 20;
+		}
+
 		float barX = 400 - barWidth / 2;
 		float barY = 40;
 		bar = new Rectangle(barX, barY, barWidth, barHeight);
@@ -102,12 +145,13 @@ public class CommonFishingScreen extends ScreenAdapter{
 		stopMovingDown = false;
 
 		font = new BitmapFont();
+		descFont = new BitmapFont();
 		batch = new SpriteBatch();
 	}
 
 	@Override
 	public void show() {
-		System.out.println("COMMON FISHING SCREEN");
+		System.out.println("FISHING SCREEN");
 
 		Texture bgTexture = game.assets.get("assets/images/underwater.png");
 
@@ -124,10 +168,10 @@ public class CommonFishingScreen extends ScreenAdapter{
 		basicHandleInput();
 		basicUpdateBarMovement();
 		basicPlayMovement();
+		elapsedTime += delta;
 		basicCheckFishBarContact();
 
 		// Fail check
-		elapsedTime += delta;
 		// System.out.println(elapsedTime);
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -160,13 +204,14 @@ public class CommonFishingScreen extends ScreenAdapter{
 		shapeRenderer.rect(bar.x, bar.y, bar.width, bar.height);
 
 		// fish
-		shapeRenderer.setColor(Color.BLACK);
+		shapeRenderer.setColor(Color.RED);
 		shapeRenderer.rect(fish.x, fish.y, fish.width, fish.height);
 
 		shapeRenderer.end();
 
 		basicRenderRemainingTime();
 		basicRenderTimeLimit();
+		renderInstructions();
 	}
 
 	private void basicHandleInput() {
@@ -179,7 +224,21 @@ public class CommonFishingScreen extends ScreenAdapter{
 
 	private void basicUpdateBarMovement() {
 		// Define the speed for movement
-		float speed = 90; // Adjust this value as needed for the desired speed
+		if (fishItem.getRarity() == Rarity.COMMON) {
+			speed = 90; // Adjust this value as needed for the desired speed
+		} else if (fishItem.getRarity() == Rarity.RARE) {
+			speed = 120; // Adjust this value as needed for the desired speed
+		} else if (fishItem.getRarity() == Rarity.LEGENDARY) {
+			speed = 150; // Adjust this value as needed for the desired speed
+		}
+		
+		// Apply upgrades
+		if (hasHook) {
+			speed -= 10;
+		}
+		if (hasFishingLine) {
+			speed -= 20;
+		}
 
 		// Update the timer
 		timer += Gdx.graphics.getDeltaTime();
@@ -202,22 +261,60 @@ public class CommonFishingScreen extends ScreenAdapter{
 		}
 
 		// Move the bar based on the current movement direction
-		if (movingUp && !stopMovingUp) {
-			// Move the bar up until it reaches the top or the stop position
-			if (bar.y < 170) {
-				bar.y += speed * Gdx.graphics.getDeltaTime(); // Move up at the fixed speed
+		if (fishItem.getRarity() == Rarity.COMMON) {
+			if (movingUp && !stopMovingUp) {
+				// Move the bar up until it reaches the top or the stop position
+				if (bar.y < 170) {
+					bar.y += speed * Gdx.graphics.getDeltaTime(); // Move up at the fixed speed
+				}
+			} else if (!movingUp && !stopMovingDown) {
+				// Move the bar down until it reaches the bottom or the stop position
+				if (bar.y > 10) {
+					bar.y -= speed * Gdx.graphics.getDeltaTime(); // Move down at the fixed speed
+				}
 			}
-		} else if (!movingUp && !stopMovingDown) {
-			// Move the bar down until it reaches the bottom or the stop position
-			if (bar.y > 10) {
-				bar.y -= speed * Gdx.graphics.getDeltaTime(); // Move down at the fixed speed
+		} else if (fishItem.getRarity() == Rarity.RARE) {
+			if (movingUp && !stopMovingUp) {
+				// Move the bar up until it reaches the top or the stop position
+				if (bar.y < 189) {
+					bar.y += speed * Gdx.graphics.getDeltaTime(); // Move up at the fixed speed
+				}
+			} else if (!movingUp && !stopMovingDown) {
+				// Move the bar down until it reaches the bottom or the stop position
+				if (bar.y > 40) {
+					bar.y -= speed * Gdx.graphics.getDeltaTime(); // Move down at the fixed speed
+				}
+			}
+		} else if (fishItem.getRarity() == Rarity.LEGENDARY) {
+			if (movingUp && !stopMovingUp) {
+				// Move the bar up until it reaches the top or the stop position
+				if (bar.y < 212) {
+					bar.y += speed * Gdx.graphics.getDeltaTime(); // Move up at the fixed speed
+				}
+			} else if (!movingUp && !stopMovingDown) {
+				// Move the bar down until it reaches the bottom or the stop position
+				if (bar.y > 40) {
+					bar.y -= speed * Gdx.graphics.getDeltaTime(); // Move down at the fixed speed
+				}
 			}
 		}
 	}
 
 	private void basicPlayMovement() {
 
-		float fishSpeed = 120;
+		if (fishItem.getRarity() == Rarity.COMMON) {
+			fishSpeed = 120;
+		} else if (fishItem.getRarity() == Rarity.RARE) {
+			fishSpeed = 135;
+		} else if (fishItem.getRarity() == Rarity.LEGENDARY) {
+			fishSpeed = 150;
+		}
+
+		// Apply upgrades
+		if (hasTackleBox) {
+			fishSpeed += 10;
+		}
+
 		if (isPressed && fish.y < 240) {
 
 			fish.y += fishSpeed * Gdx.graphics.getDeltaTime(); // Adjust speed as needed
@@ -276,6 +373,20 @@ public class CommonFishingScreen extends ScreenAdapter{
 		batch.begin();
 		font.draw(batch, timeLimitText, 10, Gdx.graphics.getHeight() - 100);
 		font.getData().setScale(5);
+		batch.end();
+	}
+
+	private void renderInstructions() {
+		batch.begin();
+		descFont.draw(
+			batch, 
+			"Hold M1 to control the red box" + 
+			"\nComplete the progress to catch the fish" + 
+			"\nDon't let the timer reach ZERO or you'll lose coins!" +
+			"\nYou don't lose coins for the first 5 games", 
+			10, 
+			Gdx.graphics.getHeight() - 240);
+		descFont.getData().setScale(1.5f);
 		batch.end();
 	}
 

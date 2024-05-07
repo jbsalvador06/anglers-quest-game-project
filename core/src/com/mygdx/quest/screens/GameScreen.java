@@ -1,7 +1,10 @@
 package com.mygdx.quest.screens;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -30,7 +33,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -47,11 +49,18 @@ import com.mygdx.quest.utils.TileMapHelper;
 
 import de.eskalon.commons.screen.ManagedScreenAdapter;
 
-public class GameScreen extends ManagedScreenAdapter implements CommonFishingScreen.FishingCallback {
+public class GameScreen extends ManagedScreenAdapter implements FishingScreen.FishingCallback {
 
+    // ADD INSTRUCTIONS TO FISHING SCREEN
     // ADD MORE SOUNDS
     // ADD UPGRADES
     // ADD STORY ???
+    // After collecting all the upgrades/collectibles, point the player towards the tent, then show the player's stats:
+    // Time Played
+    // Number of Times Fished
+    // Fish Caught
+    // Fish Discovered
+    // Upgrades/Collectibles Found
 
     private final AnglersQuest game;
 
@@ -69,6 +78,7 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
     private boolean isPopupOpen = false;
     private boolean isUIinitialized = false;
     private boolean isInstructionsOpen = false;
+    private boolean isFailedWindowOpen = false;
 
     // Viewport
     private ExtendViewport viewport;
@@ -104,6 +114,33 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
     
     float elapsedTime = 0.0f;
     float displayDuration = 5f;
+
+    // Keep track of progress
+    private float totalTimePlayed = 0f;
+    private int totalTimesFished = 0;
+    private ArrayList<Fish> fishCaught = new ArrayList<>();
+    private Set<String> fishDiscovered = new HashSet<>();
+    private Set<String> upgradesCollected = new HashSet<>();
+
+    private void updateTimePLayed(float delta) {
+        totalTimePlayed += delta;
+    }
+
+    private void incrementTimesFished() {
+        totalTimesFished++;
+    }
+
+    private void addCaughtFish(Fish fish) {
+        fishCaught.add(fish);
+    }
+
+    private void addDiscoveredFish(String fishName) {
+        fishDiscovered.add(fishName);
+    }
+
+    private void addCollectedUpgrade(String upgrade) {
+        upgradesCollected.add(upgrade);
+    }
 
     public GameScreen(OrthographicCamera camera, final AnglersQuest game) {
 
@@ -210,6 +247,9 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
         update(delta);
 
         ScreenUtils.clear(Color.valueOf("#80b782"));
+
+        // UPDATE TIME PLAYED
+        updateTimePLayed(delta);
 
         // THIS HAS TO BE HERE OR ELSE
         // THE UI WILL RENDER BELOW THE MAP
@@ -351,6 +391,7 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                         upgrades.remove(upgradeName);
                         upgradesButton.remove();
                         player.addUpgrades(upgradeName);
+                        addCollectedUpgrade(upgradeName);
                         updateCoinsLabel(coins);
                     } else {
                         if (!isPopupOpen) {
@@ -389,6 +430,7 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
             }
         }
 
+        shopWindow.defaults().pad(10);
         shopWindow.row();
         shopWindow.add(closeButton).colspan(3);
         shopWindow.pack();
@@ -415,7 +457,7 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
         inventoryWindow.row();
 
         Label fishLabel = new Label("Fish:", skin);
-        inventoryWindow.add(fishLabel).align(Align.left).row();
+        inventoryWindow.add(fishLabel).colspan(3).row();
         if (!player.getInventory().isEmpty()) {
             int count = 0;
             for (Fish fish : player.getInventory()) {
@@ -428,24 +470,25 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                 ImageButton fishButton = new ImageButton(resizedTexture);
                 inventoryWindow.add(fishButton).pad(5);
                 count++;
-
-                TextTooltip fishTooltip = new TextTooltip("Name: " + fish.getName() + "\nPrice: " + fish.getPrice() + "\nRarity: " + fish.getRarity() + "\nDescription: " + fish.getDescription(), skin, "default");
-                fishTooltip.setInstant(true);
-                fishButton.addListener(fishTooltip);
-
+                
                 if (count % 3 == 0) {
                     inventoryWindow.row();
                 }
+
+                TextTooltip fishTooltip = new TextTooltip("Name: " + fish.getName() + "\nPrice: " + fish.getPrice() + "\nRarity: " + fish.getRarity() + "\nDescription: \n" + fish.getDescription(), skin, "default");
+                fishTooltip.setInstant(true);
+                fishButton.addListener(fishTooltip);
+
             }
         } else {
-            Label noItemsLabel = new Label("Inventory is empty :(", skin);
+            Label noItemsLabel = new Label("Inventory is empty :(" + "\nCatch more fish!", skin);
             inventoryWindow.add(noItemsLabel).colspan(3);
         }
 
         inventoryWindow.row();
 
         Label upgradesLabel = new Label("Upgrades:", skin);
-        inventoryWindow.add(upgradesLabel).align(Align.left).row();
+        inventoryWindow.add(upgradesLabel).colspan(3).row();
         if (!player.getUpgrades().isEmpty()) {
             int count = 0;
             for (String upgrade : player.getUpgrades()) {
@@ -459,19 +502,21 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                 inventoryWindow.add(fishButton).pad(5);
                 count++;
 
+                if (count % 3 == 0) {
+                    inventoryWindow.row();
+                }
+
                 TextTooltip fishTooltip = new TextTooltip("Name: " + upgrade, skin);
                 fishTooltip.setInstant(true);
                 fishButton.addListener(fishTooltip);
 
-                if (count % 3 == 0) {
-                    inventoryWindow.row();
-                }
             }
         } else {
-            Label noCollectiblesLabel = new Label("Collectibles is empty :(", skin);
+            Label noCollectiblesLabel = new Label("Upgrades are empty :(", skin);
             inventoryWindow.add(noCollectiblesLabel).colspan(3);
         }
 
+        inventoryWindow.defaults().pad(10);
         inventoryWindow.row();
         inventoryWindow.add(closeButton).colspan(3);
         inventoryWindow.pack();
@@ -507,14 +552,14 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                 resizedTexture.setMinWidth(100);
                 resizedTexture.setMinHeight(100);
                 ImageButton fishButton = new ImageButton(resizedTexture);
-                sellWindow.add(fishButton).pad(5).size(100);
+                sellWindow.add(fishButton).pad(5);
                 count++;
 
                 if (count % 3 == 0) {
                     sellWindow.row();
                 }
 
-                TextTooltip fishTooltip = new TextTooltip("Name: " + fish.getName() + "\nPrice: " + fish.getPrice() + "\nRarity: " + fish.getRarity() + "\nDescription: " + fish.getDescription(), skin);
+                TextTooltip fishTooltip = new TextTooltip("Name: " + fish.getName() + "\nPrice: " + fish.getPrice() + "\nRarity: " + fish.getRarity() + "\nDescription: \n" + fish.getDescription(), skin);
                 fishTooltip.setInstant(true);
                 fishButton.addListener(fishTooltip);
 
@@ -529,10 +574,11 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                 });
             }
         } else {
-            Label noItemsLabel = new Label("Inventory is empty :(", skin);
+            Label noItemsLabel = new Label("Inventory is empty :(" + "\nCatch more fish!", skin);
             sellWindow.add(noItemsLabel).colspan(3);
         }
 
+        sellWindow.defaults().pad(10);
         sellWindow.row();
         sellWindow.add(closeButton).colspan(3);
         sellWindow.pack();
@@ -570,12 +616,13 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
         isInstructionsOpen = true;
         Window fishingInstruction = new Window("Instructions:", skin);
         Label instruction = new Label(
-            "Press (E) near a body of water" + 
-            "\nCatch a variety of fish" +
-            "\nSell them for coins" +
-            "\nBuy some upgrades/collectibles" +
-            "\nREPEAT!" 
-            ,skin);
+            "*Press (E) near a body of water" + 
+            "\n*Catch a variety of fish" +
+            "\n*Sell them for coins" +
+            "\n*Buy some upgrades/collectibles" +
+            "\n*REPEAT!" +
+            "\n*Be sure to check out the tent", 
+            skin);
         TextButton closeButton = new TextButton("Gotcha!", skin);
         closeButton.addListener(new ClickListener() {
             @Override
@@ -600,38 +647,49 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                 
                 Map<String, Fish> fishes = FishParser.parseFishJson("core/src/com/mygdx/quest/utils/fish.json");
 
-                Fish randomFish = FishParser.getRandomFish(fishes);
 
                 if (!isFishingWindowOpen) {
                     System.out.println("FISHING");
-                    System.out.println(randomFish.getName() + " " + randomFish.getRarity());
                     if (player.getInventory().size() < 9) {
-                        switch (randomFish.getRarity()) {
-                            case COMMON:
-                                System.out.println(randomFish.getRarity());
-                                isFishingWindowOpen = true;
-    
-                                game.setScreen(new CommonFishingScreen(game, randomFish, this));
+                        if (totalTimesFished < 3) {
+                            Fish randomFish = FishParser.getRandomCommonFish(fishes);
+                            System.out.println(randomFish.getName() + " " + randomFish.getRarity());
 
-                                break;
-                            case RARE:
-                                System.out.println(randomFish.getName());
-                                isFishingWindowOpen = true;
-                                
-                                game.setScreen(new CommonFishingScreen(game, randomFish, this));
+                            System.out.println(randomFish.getRarity());
+                            isFishingWindowOpen = true;
 
-                                break;
-                            case LEGENDARY:
-                                System.out.println(randomFish.getName());
-                                isFishingWindowOpen = true;
-    
-                                game.setScreen(new CommonFishingScreen(game, randomFish, this));
+                            game.setScreen(new FishingScreen(game, randomFish, this, player));
+                        } else {
+                            Fish randomFish = FishParser.getRandomFish(fishes);
+                            System.out.println(randomFish.getName() + " " + randomFish.getRarity());
 
-                                break;
+                            switch (randomFish.getRarity()) {
+                                case COMMON:
+                                    System.out.println(randomFish.getRarity());
+                                    isFishingWindowOpen = true;
+        
+                                    game.setScreen(new FishingScreen(game, randomFish, this, player));
     
-                            default:
-                                isFishingWindowOpen = false;
-                                break;
+                                    break;
+                                case RARE:
+                                    System.out.println(randomFish.getName());
+                                    isFishingWindowOpen = true;
+                                    
+                                    game.setScreen(new FishingScreen(game, randomFish, this, player));
+    
+                                    break;
+                                case LEGENDARY:
+                                    System.out.println(randomFish.getName());
+                                    isFishingWindowOpen = true;
+        
+                                    game.setScreen(new FishingScreen(game, randomFish, this, player));
+    
+                                    break;
+        
+                                default:
+                                    isFishingWindowOpen = false;
+                                    break;
+                            }
                         }
                     } else {
                         if (!isPopupOpen) {
@@ -649,6 +707,7 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
                             });
                             Label label = new Label("Inventory is full! Sell some items first", skin);
 
+                            popup.defaults().pad(10);
                             popup.add(label);
                             popup.row();
                             popup.add(okayButton);
@@ -697,30 +756,81 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
     }
 
     private void renderFailedWindow(Fish fish) {
-        Window failedWindow = new Window("Better luck next time!", skin);
-        Label failedLabel = new Label("You failed to catch a " + fish.getName(), skin);
-        TextButton closeButton = new TextButton("Close", skin);
-        closeButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                failedWindow.remove();
+
+        int coinDeduction = 0;
+        if (totalTimesFished < 5) {
+            coinDeduction = 0;
+        } else {
+            switch (fish.getRarity()) {
+                case COMMON:
+                    coinDeduction = 10;
+                    break;
+                case RARE:
+                    coinDeduction = 15;
+                    break;
+                case LEGENDARY:
+                    coinDeduction = 20;
+                    break;
             }
-        });
+        }
 
-        Texture fishTexture = new Texture(Gdx.files.internal(fish.getImgUrl()));
-        TextureRegionDrawable resizedTexture = new TextureRegionDrawable(
-                new TextureRegion(fishTexture, 0, 0, fishTexture.getWidth(), fishTexture.getHeight()));
-        resizedTexture.setMinWidth(100);
-        resizedTexture.setMinHeight(100);
-        Image fishImage = new Image(resizedTexture);
+        player.setCoins(-coinDeduction);
 
-        failedWindow.defaults().pad(10);
-        failedWindow.add(failedLabel).row();
-        failedWindow.add(fishImage).pad(50).row();
-        failedWindow.add(closeButton);
-        failedWindow.pack();
-        failedWindow.setPosition(game.widthScreen / 2 - failedWindow.getWidth() / 2, game.heightScreen / 2 - failedWindow.getHeight() / 2);
-        uiStage.addActor(failedWindow);
+        if (player.getCoins() <= 0) {
+            isFailedWindowOpen = true;
+            // Game over condition
+            Window gameOverWindow = new Window("Game Over!", skin);
+            Label gameOverLabel = new Label("You have lost all your coins!", skin);
+            TextButton restartButton = new TextButton("Restart", skin);
+            restartButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    // Reset the game state or go back to the main menu
+                    System.out.println("GAME OVER");
+                    isFailedWindowOpen = false;
+                    game.dispose();
+                    game.create();
+                    game.setScreen(new LoadingScreen(game));
+                }
+            });
+    
+            gameOverWindow.defaults().pad(10);
+            gameOverWindow.add(gameOverLabel).row();
+            gameOverWindow.add(restartButton).row();
+            gameOverWindow.pack();
+            gameOverWindow.setPosition(game.widthScreen / 2 - gameOverWindow.getWidth() / 2, game.heightScreen / 2 - gameOverWindow.getHeight() / 2);
+            uiStage.addActor(gameOverWindow);
+        }
+
+        if (!isFailedWindowOpen) {
+            Window failedWindow = new Window("Better luck next time!", skin);
+            Label failedLabel = new Label("You failed to catch a " + fish.getName(), skin);
+            TextButton closeButton = new TextButton("Close", skin);
+            closeButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    failedWindow.remove();
+                }
+            });
+
+            Texture fishTexture = new Texture(Gdx.files.internal(fish.getImgUrl()));
+            TextureRegionDrawable resizedTexture = new TextureRegionDrawable(
+                    new TextureRegion(fishTexture, 0, 0, fishTexture.getWidth(), fishTexture.getHeight()));
+            resizedTexture.setMinWidth(100);
+            resizedTexture.setMinHeight(100);
+            Image fishImage = new Image(resizedTexture);
+
+            Label coinDeductionLabel = new Label("You lost " + coinDeduction + " coins!", skin);
+
+            failedWindow.defaults().pad(10);
+            failedWindow.add(failedLabel).row();
+            failedWindow.add(fishImage).pad(50).row();
+            failedWindow.add(coinDeductionLabel).row();
+            failedWindow.add(closeButton);
+            failedWindow.pack();
+            failedWindow.setPosition(game.widthScreen / 2 - failedWindow.getWidth() / 2, game.heightScreen / 2 - failedWindow.getHeight() / 2);
+            uiStage.addActor(failedWindow);
+        }
     }
 
     @Override
@@ -728,10 +838,14 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
         if (isFishCaught) {
             player.addItem(randomFish);
             System.out.println("Fish caught: " + randomFish.getName());
+            incrementTimesFished();
+            addCaughtFish(randomFish);
             successSFX.play();
             renderSuccessWindow(randomFish);
         } else {
             System.out.println("No fish was caught");
+            incrementTimesFished();
+            addDiscoveredFish(randomFish.getName());
             failSFX.play();
             renderFailedWindow(randomFish);
         }
@@ -745,5 +859,7 @@ public class GameScreen extends ManagedScreenAdapter implements CommonFishingScr
         world.dispose();
         skin.dispose();
         uiStage.dispose();
+        splashScreenSound.dispose();
+        successSFX.dispose();
     }
 }

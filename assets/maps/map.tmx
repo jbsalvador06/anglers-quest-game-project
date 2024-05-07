@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="165" height="65" tilewidth="16" tileheight="16" infinite="0" nextlayerid="51" nextobjectid="765">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="165" height="65" tilewidth="16" tileheight="16" infinite="0" nextlayerid="52" nextobjectid="771">
  <tileset firstgid="1" source="Forest.tsx"/>
  <layer id="16" name="Mud" width="165" height="65">
   <data encoding="csv">
@@ -1381,7 +1381,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="27" name="Obstacles" visible="0" locked="1" offsetx="-0.272727" offsety="0.045455">
+ <objectgroup id="27" name="Obstacles" offsetx="-0.272727" offsety="0.045455">
   <object id="91" name="Player" x="1904.67" y="504" width="12.4545" height="22.4545"/>
   <object id="104" x="1446.5" y="432.625">
    <polygon points="0,0 0,11.875 17.75,11.5 17.625,-0.25"/>
@@ -1932,8 +1932,9 @@
   <object id="764" name="Water" x="624" y="832">
    <polygon points="0,0 -16,16 -32,16 -16,0"/>
   </object>
+  <object id="770" name="Tent" x="1935.77" y="475.413" width="16.375" height="25.75"/>
  </objectgroup>
- <objectgroup id="41" name="WaterBody" visible="0" locked="1">
+ <objectgroup id="41" name="WaterBody">
   <object id="350" name="Pond" x="1360" y="544" width="192" height="176"/>
   <object id="351" name="Pond" x="1552" y="560" width="64" height="144"/>
   <object id="352" name="Pond" x="1616" y="560" width="32" height="128"/>

@@ -40,6 +40,8 @@ import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
 import com.mygdx.quest.entities.River;
+import com.mygdx.quest.entities.Tent;
+import com.mygdx.quest.utils.BodyHelper;
 import com.mygdx.quest.utils.CameraHandler;
 import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
@@ -110,6 +112,8 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
     private boolean pondKey = false;
     private River river;
     private boolean riverKey = false;
+    private Tent tent;
+    private boolean tentKey = false; 
     private boolean isInventoryWindowOpen = false;
     
     float elapsedTime = 0.0f;
@@ -260,7 +264,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
         orthogonalTiledMapRenderer.render(backgroundLayers);
 
         if (renderDebug) {
-            // box2dDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
+            box2dDebugRenderer.render(world, camera.combined.scl(Constants.PPM));
         }
 
         // THIS HAS TO BE HERE OR ELSE
@@ -607,6 +611,10 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
         this.river = river;
     }
 
+    public void setTent(Tent tent) {
+        this.tent = tent;
+    }
+
     @Override
     public void pause() {
         System.out.println("GameScreen Paused");
@@ -721,6 +729,39 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                     isFishingWindowOpen = false;
                 }
             }
+            if (contactListener.tentInteract) {
+                System.out.println("Detected player-tent collision");
+                tentKey = true;
+                
+                Window statisticsWindow = new Window("Statistics", skin);
+                statisticsWindow.defaults().pad(10);
+
+                Label timePlayed = new Label("Time Played: " + totalTimePlayed + " seconds", skin);
+                Label timesFished = new Label("Number of Times Fished: " + totalTimesFished, skin);
+                Label fishCaught = new Label("Fish Caught: " + this.fishCaught.size(), skin);
+                Label fishDiscovered = new Label("Fish Discovered: " + this.fishDiscovered.size(), skin);
+                Label upgradesCollected = new Label("Upgrades/Collectibles Found: " + this.upgradesCollected.size(), skin);
+
+                statisticsWindow.add(timePlayed).row();
+                statisticsWindow.add(timesFished).row();
+                statisticsWindow.add(fishCaught).row();
+                statisticsWindow.add(fishDiscovered).row();
+                statisticsWindow.add(upgradesCollected).row();
+
+                TextButton closeButton = new TextButton("Close", skin);
+                closeButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        statisticsWindow.remove();
+                    }
+                });
+                statisticsWindow.add(closeButton).row();
+                
+                // Position and add the window to the stage
+                statisticsWindow.pack();
+                statisticsWindow.setPosition(game.widthScreen / 2 - statisticsWindow.getWidth() / 2, game.heightScreen / 2 - statisticsWindow.getHeight() / 2);
+                uiStage.addActor(statisticsWindow);
+            }
         }
     }
 
@@ -774,32 +815,32 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             }
         }
 
-        player.setCoins(-coinDeduction);
-
-        if (player.getCoins() <= 0) {
-            isFailedWindowOpen = true;
-            // Game over condition
-            Window gameOverWindow = new Window("Game Over!", skin);
-            Label gameOverLabel = new Label("You have lost all your coins!", skin);
-            TextButton restartButton = new TextButton("Restart", skin);
-            restartButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    // Reset the game state or go back to the main menu
-                    System.out.println("GAME OVER");
-                    isFailedWindowOpen = false;
-                    game.dispose();
-                    game.create();
-                    game.setScreen(new LoadingScreen(game));
-                }
-            });
-    
-            gameOverWindow.defaults().pad(10);
-            gameOverWindow.add(gameOverLabel).row();
-            gameOverWindow.add(restartButton).row();
-            gameOverWindow.pack();
-            gameOverWindow.setPosition(game.widthScreen / 2 - gameOverWindow.getWidth() / 2, game.heightScreen / 2 - gameOverWindow.getHeight() / 2);
-            uiStage.addActor(gameOverWindow);
+        if (totalTimePlayed < 3) {
+            if (player.getCoins() <= 0) {
+                isFailedWindowOpen = true;
+                // Game over condition
+                Window gameOverWindow = new Window("Game Over!", skin);
+                Label gameOverLabel = new Label("You have lost all your coins!", skin);
+                TextButton restartButton = new TextButton("Restart", skin);
+                restartButton.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        // Reset the game state or go back to the main menu
+                        System.out.println("GAME OVER");
+                        isFailedWindowOpen = false;
+                        game.dispose();
+                        game.create();
+                        game.setScreen(new LoadingScreen(game));
+                    }
+                });
+        
+                gameOverWindow.defaults().pad(10);
+                gameOverWindow.add(gameOverLabel).row();
+                gameOverWindow.add(restartButton).row();
+                gameOverWindow.pack();
+                gameOverWindow.setPosition(game.widthScreen / 2 - gameOverWindow.getWidth() / 2, game.heightScreen / 2 - gameOverWindow.getHeight() / 2);
+                uiStage.addActor(gameOverWindow);
+            }
         }
 
         if (!isFailedWindowOpen) {
@@ -840,6 +881,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             System.out.println("Fish caught: " + randomFish.getName());
             incrementTimesFished();
             addCaughtFish(randomFish);
+            addDiscoveredFish(randomFish.getName());
             successSFX.play();
             renderSuccessWindow(randomFish);
         } else {

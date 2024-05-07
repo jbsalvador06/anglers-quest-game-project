@@ -16,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
 import com.mygdx.quest.entities.River;
+import com.mygdx.quest.entities.Tent;
 import com.mygdx.quest.screens.GameScreen;
 
 public class TileMapHelper {
@@ -29,7 +30,7 @@ public class TileMapHelper {
 
     public OrthogonalTiledMapRenderer setupMap() {
         // tiledMap = AnglersQuest.assets.getMap();
-        tiledMap = new TmxMapLoader().load("maps/map.tmx");
+        tiledMap = new TmxMapLoader().load("assets/maps/map.tmx");
         parseMapObjects(tiledMap.getLayers().get("Obstacles").getObjects());
         parseMapObjects(tiledMap.getLayers().get("WaterBody").getObjects());
         return new OrthogonalTiledMapRenderer(tiledMap);
@@ -81,6 +82,19 @@ public class TileMapHelper {
                         gameScreen.getWorld()
                     );
                     gameScreen.setRiver(new River(rectangle.getWidth(), rectangle.getHeight(), body));
+                }
+
+                if (rectangleName.equals("Tent")) {
+                    System.out.println("CREATING TENT OBJECT");
+                    Body body = BodyHelper.createBody(
+                        rectangle.getX() + rectangle.getWidth() / 2,
+                        rectangle.getY() + rectangle.getHeight() / 2,
+                        rectangle.getWidth(),
+                        rectangle.getHeight(),
+                        true,
+                        gameScreen.getWorld()
+                    );
+                    gameScreen.setTent(new Tent(rectangle.getWidth(), rectangle.getHeight(), body));
                 }
             }
         }

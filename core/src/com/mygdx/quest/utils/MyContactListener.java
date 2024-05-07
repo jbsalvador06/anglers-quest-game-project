@@ -8,11 +8,13 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
 import com.mygdx.quest.entities.River;
+import com.mygdx.quest.entities.Tent;
 
 public class MyContactListener implements ContactListener {
     
     public boolean pondInteract = false;
     public boolean riverInteract = false;
+    public boolean tentInteract = false;
 
     @Override
     public void beginContact(Contact contact) {
@@ -45,14 +47,32 @@ public class MyContactListener implements ContactListener {
             System.out.println(fa.getUserData());
             System.out.println(fb.getUserData());
 
-            pondInteract = true;
+            riverInteract = true;
             System.out.println(riverInteract);
+        }
+
+        if ((fa.getUserData() instanceof Player && fb.getUserData() instanceof Tent) ||
+            (fa.getUserData() instanceof Tent && fb.getUserData() instanceof Player)) {
+            System.out.println("Detected player-tent collision");
+            
+            // Tent's body
+            Fixture itemFixture = fa.getUserData() instanceof Tent ? fa : fb;
+            itemFixture.getUserData();
+            
+            System.out.println("Detected player-tent contact");
+            System.out.println(fa.getUserData());
+            System.out.println(fb.getUserData());
+
+            tentInteract = true;
+            System.out.println(tentInteract);
         }
     }
 
     @Override
     public void endContact(Contact contact) {
         pondInteract = false;
+        riverInteract = false;
+        tentInteract = false;
     }
 
     @Override

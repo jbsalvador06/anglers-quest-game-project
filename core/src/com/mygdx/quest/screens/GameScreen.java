@@ -367,14 +367,6 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             String upgradeName = entry.getKey();
             int upgradePrice = entry.getValue();
 
-            TextButton itemButton = new TextButton(upgradeName, skin);
-            itemButton.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Bought: " + upgradeName);
-                }
-            });
-
             Texture upgradesTexture = new Texture(
                     Gdx.files.internal((String) "assets/upgrades/" + upgradeName.toLowerCase() + ".png"));
             TextureRegionDrawable resizedTexture = new TextureRegionDrawable(
@@ -397,6 +389,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                         player.addUpgrades(upgradeName);
                         addCollectedUpgrade(upgradeName);
                         updateCoinsLabel(coins);
+                        buttonClick.play();
                     } else {
                         if (!isPopupOpen) {
                             System.out.println("POPUP");
@@ -411,6 +404,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                                 public void clicked(InputEvent event, float x, float y) {
                                     popup.remove();
                                     isPopupOpen = false;
+                                    buttonClick.play();
                                 }
                             });
                             Label label = new Label("Not enough coins!", skin);
@@ -452,6 +446,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 inventoryWindow.remove();
                 isInventoryWindowOpen = false;
                 System.out.println("CLOSED INVENTORY WINDOW");
+                buttonClick.play();
             }
         });
 
@@ -538,6 +533,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 sellWindow.remove();
                 isSellWindowOpen = false;
                 System.out.println("CLOSED SELL WINDOW");
+                buttonClick.play();
             }
         });
 
@@ -574,6 +570,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                         player.setCoins(fish.getPrice());
                         player.removeItem(fish);
                         updateCoinsLabel(coins);
+                        buttonClick.play();
                     }
                 });
             }
@@ -636,6 +633,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 fishingInstruction.remove();
+                buttonClick.play();
             }
         });
 
@@ -711,6 +709,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                                 public void clicked(InputEvent event, float x, float y) {
                                     popup.remove();
                                     isPopupOpen = false;
+                                    buttonClick.play();
                                 }
                             });
                             Label label = new Label("Inventory is full! Sell some items first", skin);
@@ -753,6 +752,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         statisticsWindow.remove();
+                        buttonClick.play();
                     }
                 });
                 statisticsWindow.add(closeButton).row();
@@ -773,6 +773,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 successWindow.remove();
+                buttonClick.play();
             }
         });
         Label descriptionLabel = new Label("\"" + fish.getDescription() + "\"", skin);
@@ -828,6 +829,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                         // Reset the game state or go back to the main menu
                         System.out.println("GAME OVER");
                         isFailedWindowOpen = false;
+                        buttonClick.play();
                         game.dispose();
                         game.create();
                         game.setScreen(new LoadingScreen(game));
@@ -851,6 +853,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     failedWindow.remove();
+                    buttonClick.play();
                 }
             });
 

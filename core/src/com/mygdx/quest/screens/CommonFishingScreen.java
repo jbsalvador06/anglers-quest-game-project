@@ -2,6 +2,7 @@ package com.mygdx.quest.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -13,7 +14,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.quest.AnglersQuest;
 import com.mygdx.quest.utils.Fish;
@@ -39,12 +39,31 @@ public class CommonFishingScreen extends ScreenAdapter{
 	private Image background;
 	private Stage stage;
 
+	private Sound reelingSFX;
+
+	private float elapsedTime;
+	private float timeLimit = 15f;
+	private Fish fishItem;
+
 	final AnglersQuest game;
 	float barHeight;
 
+	public interface FishingCallback {
+		void onFishingCompleted(boolean isFishCaught, Fish fish);
+	}
 
-	public CommonFishingScreen(final AnglersQuest game, Fish fishItem) {
+	private FishingCallback fishingCallback;
+
+	public CommonFishingScreen(final AnglersQuest game, Fish fishItem, FishingCallback fishingCallback) {
 		this.game = game;
+		this.fishingCallback = fishingCallback;
+		this.fishItem = fishItem;
+
+		// Fail check
+		elapsedTime = 0f;
+
+		reelingSFX = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/reelingSFX.mp3"));
+
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 
@@ -107,6 +126,10 @@ public class CommonFishingScreen extends ScreenAdapter{
 		basicPlayMovement();
 		basicCheckFishBarContact();
 
+		// Fail check
+		elapsedTime += delta;
+		// System.out.println(elapsedTime);
+
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -143,6 +166,7 @@ public class CommonFishingScreen extends ScreenAdapter{
 		shapeRenderer.end();
 
 		basicRenderRemainingTime();
+		basicRenderTimeLimit();
 	}
 
 	private void basicHandleInput() {
@@ -207,21 +231,36 @@ public class CommonFishingScreen extends ScreenAdapter{
 	private void basicCheckFishBarContact() {
 		// Check for fish bar contact
 		if (fish.overlaps(bar)) {
+			reelingSFX.play();
 			fishingTimer += Gdx.graphics.getDeltaTime(); // Increment fishing timer
 			if (fishingTimer >= 10f) { // Check if contact duration is 12 seconds
+				reelingSFX.stop();
 				game.setScreen(game.gameScreen); // Exit the application
 				fishingTimer = 0;
+				if (fishingCallback != null) {
+					fishingCallback.onFishingCompleted(true, fishItem);
+				}
 			}
 		} else {
 			// Reset timer if there's no contact
+			reelingSFX.stop();
 			fishingTimer = Math.max(0, fishingTimer - Gdx.graphics.getDeltaTime());
+
+			if (elapsedTime >= timeLimit) {
+				reelingSFX.stop();
+				game.setScreen(game.gameScreen);
+				elapsedTime = 0f;
+				if (fishingCallback != null) {
+					fishingCallback.onFishingCompleted(false, fishItem);
+				}
+			}
 		}
 	}
 
 	// DISPLAYS REMAINING TIME UNTIL COMPLETION
 	private void basicRenderRemainingTime() {
-		float remainingTime = Math.max(0, 10f - fishingTimer); // Calculate remaining time
-		String timeText = "Time: " + String.format("%.1f", remainingTime); // Format time as string
+		float remainingTime = Math.max(0, fishingTimer); // Calculate remaining time
+		String timeText = "Progress: " + String.format("%.0f", remainingTime * 10) + "/100"; // Format time as string
 
 		// Draw time text on the screen
 		batch.begin();
@@ -230,9 +269,21 @@ public class CommonFishingScreen extends ScreenAdapter{
 		batch.end();
 	}
 
+	private void basicRenderTimeLimit() {
+		float remainingTime = Math.max(0, timeLimit - elapsedTime);
+		String timeLimitText = "Time left: " + String.format("%.0f", remainingTime) + "s";
+
+		batch.begin();
+		font.draw(batch, timeLimitText, 10, Gdx.graphics.getHeight() - 100);
+		font.getData().setScale(5);
+		batch.end();
+	}
+
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		game.widthScreen = width;
+		game.heightScreen = height;
 	}
 
 	@Override

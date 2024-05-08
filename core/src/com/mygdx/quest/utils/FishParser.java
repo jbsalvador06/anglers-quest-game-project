@@ -1,6 +1,5 @@
 package com.mygdx.quest.utils;
 
-import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,17 +9,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.mygdx.quest.utils.Fish.Rarity;
 
 public class FishParser {
 
-    public static Map<String, Fish> parseFishJson(String fileName) {
+    public static Map<String, Fish> parseFishJson(FileHandle fishFile) {
         
         JSONParser parser = new JSONParser();
         Map<String, Fish> fishMap = new HashMap<>();
 
         try {
-            Object obj = parser.parse(new FileReader(fileName));
+            Object obj = parser.parse(fishFile.reader());
             JSONArray fishData = (JSONArray) obj;
     
             for (Object fishObject : fishData) {

@@ -41,7 +41,7 @@ public class MainMenuScreen extends ScreenAdapter {
     @Override
     public void show() {
         System.out.println("MAIN MENU SCREEN");
-        Texture bgTexture = game.assets.get("assets/images/background.png");
+        Texture bgTexture = game.assets.get("images\\background.png");
 
         background = new Image(bgTexture);
         background.setFillParent(true);
@@ -52,8 +52,8 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.addActor(background);
 
         this.skin = new Skin();
-        this.skin.addRegions(game.assets.get("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class));
-        this.skin.load(Gdx.files.internal("assets/skins/old-skins/quest-skin.json"));
+        this.skin.addRegions(game.assets.get("skins\\old-skins\\quest-skin.atlas", TextureAtlas.class));
+        this.skin.load(Gdx.files.internal("skins\\old-skins\\quest-skin.json"));
 
         initButton();
     }
@@ -80,7 +80,7 @@ public class MainMenuScreen extends ScreenAdapter {
         int buttonWidth = AnglersQuest.V_WIDTH / 8;
         int buttonHeight = AnglersQuest.V_HEIGHT / 8;
 
-        Texture splashTexture = game.assets.get("assets/images/anglers-quest-header.png", Texture.class);
+        Texture splashTexture = game.assets.get("images\\anglers-quest-header.png", Texture.class);
         splashImg = new Image(splashTexture);
         splashImg.setPosition(stage.getWidth() / 2 - splashImg.getWidth() / 2, stage.getHeight() / 2 - splashImg.getHeight() / 2);
 

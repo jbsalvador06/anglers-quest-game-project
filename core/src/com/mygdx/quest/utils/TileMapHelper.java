@@ -30,7 +30,7 @@ public class TileMapHelper {
 
     public OrthogonalTiledMapRenderer setupMap() {
         // tiledMap = AnglersQuest.assets.getMap();
-        tiledMap = new TmxMapLoader().load("assets/maps/map.tmx");
+        tiledMap = new TmxMapLoader().load("maps\\map.tmx");
         parseMapObjects(tiledMap.getLayers().get("Obstacles").getObjects());
         parseMapObjects(tiledMap.getLayers().get("WaterBody").getObjects());
         return new OrthogonalTiledMapRenderer(tiledMap);

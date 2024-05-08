@@ -45,7 +45,7 @@ public class Player extends GameEntity{
         Player.body = body;
         
         // Animation
-        this.atlas = new TextureAtlas("assets/player/new-new-player/playerMove.atlas");
+        this.atlas = new TextureAtlas("player\\new-new-player\\playerMove.atlas");
         this.upStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("up-still"));
         this.downStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("down-still"));
         this.leftStill = new Animation<TextureRegion>(FRAME_TIME, atlas.findRegions("left-still"));
@@ -58,7 +58,7 @@ public class Player extends GameEntity{
         inventory = new ArrayList<>();
         upgradesInventory = new ArrayList<>();
 
-        footSteps = Gdx.audio.newSound(Gdx.files.internal("sounds/walkSFX.mp3"));
+        footSteps = Gdx.audio.newSound(Gdx.files.internal("sounds\\walkSFX.mp3"));
         footSteps.setVolume(footStepsID, 0.1f);
         
         body.getFixtureList().first().setUserData(this);

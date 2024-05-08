@@ -96,7 +96,7 @@ public class FishingScreen extends ScreenAdapter{
 		// Fail check
 		elapsedTime = 0f;
 
-		reelingSFX = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/reelingSFX.mp3"));
+		reelingSFX = Gdx.audio.newSound(Gdx.files.internal("sounds\\reelingSFX.mp3"));
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
@@ -153,11 +153,10 @@ public class FishingScreen extends ScreenAdapter{
 	public void show() {
 		System.out.println("FISHING SCREEN");
 
-		Texture bgTexture = game.assets.get("assets/images/underwater.png");
+		Texture bgTexture = game.assets.get("images\\underwater.png");
 
         background = new Image(bgTexture);
         background.setFillParent(true);
-		background.setPosition(game.widthScreen / 2 - bgTexture.getWidth() / 2, game.heightScreen / 2 - bgTexture.getHeight() / 2);
 
 		stage.clear();
 		stage.addActor(background);

@@ -6,7 +6,7 @@
         "location": "Lake",
         "rarity": "COMMON",
         "weight": 24,
-        "imgUrl": "assets/fish/largemouthbass.png"
+        "imgUrl": "fish/largemouthbass.png"
     },
     {
         "name": "Walleye",
@@ -15,7 +15,7 @@
         "location": "Lake",
         "rarity": "COMMON",
         "weight": 31,
-        "imgUrl": "assets/fish/walleye.png"
+        "imgUrl": "fish/walleye.png"
     },
     {
         "name": "Trout",
@@ -24,7 +24,7 @@
         "location": "Lake",
         "rarity": "RARE",
         "weight": 22,
-        "imgUrl": "assets/fish/trout.png"
+        "imgUrl": "fish/trout.png"
     },
     {
         "name": "Crappie",
@@ -33,7 +33,7 @@
         "location": "Lake",
         "rarity": "LEGENDARY",
         "weight": 79,
-        "imgUrl": "assets/fish/crappie.png"
+        "imgUrl": "fish/crappie.png"
     },
     {
         "name": "Seabass",
@@ -42,7 +42,7 @@
         "location": "Pond",
         "rarity": "COMMON",
         "weight": 69,
-        "imgUrl": "assets/fish/seabass.png"
+        "imgUrl": "fish/seabass.png"
     },
     {
         "name": "Goldfish",
@@ -51,7 +51,7 @@
         "location": "Pond",
         "rarity": "COMMON",
         "weight": 14,
-        "imgUrl": "assets/fish/goldfish.png"
+        "imgUrl": "fish/goldfish.png"
     },
     {
         "name": "Comet",
@@ -60,7 +60,7 @@
         "location": "Pond",
         "rarity": "COMMON",
         "weight": 63,
-        "imgUrl": "assets/fish/comet.png"
+        "imgUrl": "fish/comet.png"
     },
     {
         "name": "Oranda",
@@ -69,7 +69,7 @@
         "location": "Pond",
         "rarity": "RARE",
         "weight": 33,
-        "imgUrl": "assets/fish/oranda.png"
+        "imgUrl": "fish/oranda.png"
     },
     {
         "name": "Shubunkin",
@@ -78,7 +78,7 @@
         "location": "Pond",
         "rarity": "RARE",
         "weight": 48,
-        "imgUrl": "assets/fish/shubunkin.png"
+        "imgUrl": "fish/shubunkin.png"
     },
     {
         "name": "Mosquito Fish",
@@ -87,7 +87,7 @@
         "location": "Pond",
         "rarity": "RARE",
         "weight": 61,
-        "imgUrl": "assets/fish/mosquitofish.png"
+        "imgUrl": "fish/mosquitofish.png"
     },
     {
         "name": "Sunfish",
@@ -96,7 +96,7 @@
         "location": "Pond",
         "rarity": "LEGENDARY",
         "weight": 41,
-        "imgUrl": "assets/fish/sunfish.png"
+        "imgUrl": "fish/sunfish.png"
     },
     {
         "name": "Catfish",
@@ -105,7 +105,7 @@
         "location": "Pond",
         "rarity": "LEGENDARY",
         "weight": 87,
-        "imgUrl": "assets/fish/catfish.png"
+        "imgUrl": "fish/catfish.png"
     },
     {
         "name": "Koi",
@@ -114,6 +114,6 @@
         "location": "Pond",
         "rarity": "LEGENDARY",
         "weight": 94,
-        "imgUrl": "assets/fish/KO1.png"
+        "imgUrl": "fish/KO1.png"
     }
 ]

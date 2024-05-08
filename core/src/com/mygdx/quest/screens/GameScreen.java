@@ -10,10 +10,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -41,7 +41,6 @@ import com.mygdx.quest.entities.Player;
 import com.mygdx.quest.entities.Pond;
 import com.mygdx.quest.entities.River;
 import com.mygdx.quest.entities.Tent;
-import com.mygdx.quest.utils.BodyHelper;
 import com.mygdx.quest.utils.CameraHandler;
 import com.mygdx.quest.utils.Constants;
 import com.mygdx.quest.utils.Fish;
@@ -53,24 +52,12 @@ import de.eskalon.commons.screen.ManagedScreenAdapter;
 
 public class GameScreen extends ManagedScreenAdapter implements FishingScreen.FishingCallback {
 
-    // ADD INSTRUCTIONS TO FISHING SCREEN
-    // ADD MORE SOUNDS
-    // ADD UPGRADES
-    // ADD STORY ???
-    // After collecting all the upgrades/collectibles, point the player towards the tent, then show the player's stats:
-    // Time Played
-    // Number of Times Fished
-    // Fish Caught
-    // Fish Discovered
-    // Upgrades/Collectibles Found
-
     private final AnglersQuest game;
 
     // Shop Items
     private Map<String, Integer> upgrades;
     private boolean isShopWindowOpen = false;
     private boolean isSellWindowOpen = false;
-    // CREATE UPGRADES.JSON AND UPGRADES PARSER
 
     // For UI elements
     private Stage uiStage;
@@ -81,6 +68,8 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
     private boolean isUIinitialized = false;
     private boolean isInstructionsOpen = false;
     private boolean isFailedWindowOpen = false;
+    private Window upgradeDesc;
+    private Window shopWindow;
 
     // Viewport
     private ExtendViewport viewport;
@@ -99,8 +88,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Skin skin;
-    private BitmapFont font;
-    private static Music mainMenuMusic, gameMusic;
+    private static Music mainMenuMusic;
     private Sound splashScreenSound;
     private Sound buttonClick;
     private Sound successSFX;
@@ -181,11 +169,11 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
         upgrades.put("Fishing-Line", 500);
 
         // Audio
-        GameScreen.mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("assets/sounds/mainMenuSFX.mp3"));
-        splashScreenSound = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/splashScreenSFX.mp3"));
-        buttonClick = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/buttonClickSFX.mp3"));
-        successSFX = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/successSFX.mp3"));
-        failSFX = Gdx.audio.newSound(Gdx.files.internal("assets/sounds/failSFX.mp3"));
+        GameScreen.mainMenuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/gameMusicSFX.mp3"));
+        splashScreenSound = Gdx.audio.newSound(Gdx.files.internal("sounds/splashScreenSFX.mp3"));
+        buttonClick = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonClickSFX.mp3"));
+        successSFX = Gdx.audio.newSound(Gdx.files.internal("sounds/successSFX.mp3"));
+        failSFX = Gdx.audio.newSound(Gdx.files.internal("sounds/failSFX.mp3"));
 
         mainMenuMusic.setLooping(true);
         mainMenuMusic.setVolume(0.1f);
@@ -227,8 +215,8 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
 
         // For UI elements
         this.skin = new Skin();
-        this.skin.addRegions(game.assets.get("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class));
-        this.skin.load(Gdx.files.internal("assets/skins/old-skins/quest-skin.json"));
+        this.skin.addRegions(game.assets.get("skins\\old-skins\\quest-skin.atlas", TextureAtlas.class));
+        this.skin.load(Gdx.files.internal("skins\\old-skins\\quest-skin.json"));
 
         shopButton = new TextButton("Shop", skin);
         sellButton = new TextButton("Sell", skin);
@@ -314,7 +302,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                     isShopWindowOpen = true;
 
                     initShopUI();
-                    buttonClick.play();
+                    buttonClick.play(0.2f);
                 }
             }
         });
@@ -326,7 +314,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                     isSellWindowOpen = true;
 
                     initSellUI();
-                    buttonClick.play();
+                    buttonClick.play(0.2f);
                 }
             }
         });
@@ -338,22 +326,26 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                     isInventoryWindowOpen = true;
 
                     initInventoryUI();
-                    buttonClick.play();
+                    buttonClick.play(0.2f);
                 }
             }
         });
     }
 
     private void initShopUI() {
-        Window shopWindow = new Window("Shop", skin);
+        shopWindow = new Window("Shop", skin);
+
+        renderUpgradesDesc();
+
         TextButton closeButton = new TextButton("Close", skin);
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 shopWindow.remove();
+                upgradeDesc.remove();
                 isShopWindowOpen = false;
                 System.out.println("CLOSED SHOP WINDOW");
-                buttonClick.play();
+                buttonClick.play(0.2f);
             }
         });
 
@@ -368,7 +360,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             int upgradePrice = entry.getValue();
 
             Texture upgradesTexture = new Texture(
-                    Gdx.files.internal((String) "assets/upgrades/" + upgradeName.toLowerCase() + ".png"));
+                    Gdx.files.internal((String) "upgrades/" + upgradeName.toLowerCase() + ".png"));
             TextureRegionDrawable resizedTexture = new TextureRegionDrawable(
                     new TextureRegion(upgradesTexture, 0, 0, upgradesTexture.getWidth(), upgradesTexture.getHeight()));
             resizedTexture.setMinWidth(100);
@@ -389,12 +381,13 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                         player.addUpgrades(upgradeName);
                         addCollectedUpgrade(upgradeName);
                         updateCoinsLabel(coins);
-                        buttonClick.play();
+                        buttonClick.play(0.2f);
                     } else {
                         if (!isPopupOpen) {
                             System.out.println("POPUP");
                             isPopupOpen = true;
                             shopWindow.remove();
+                            upgradeDesc.remove();
                             isShopWindowOpen = false;
                             Window popup = new Window("Shop", skin);
                             TextButton okayButton = new TextButton("Okay!", skin);
@@ -404,7 +397,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                                 public void clicked(InputEvent event, float x, float y) {
                                     popup.remove();
                                     isPopupOpen = false;
-                                    buttonClick.play();
+                                    buttonClick.play(0.2f);
                                 }
                             });
                             Label label = new Label("Not enough coins!", skin);
@@ -446,7 +439,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 inventoryWindow.remove();
                 isInventoryWindowOpen = false;
                 System.out.println("CLOSED INVENTORY WINDOW");
-                buttonClick.play();
+                buttonClick.play(0.2f);
             }
         });
 
@@ -491,7 +484,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
         if (!player.getUpgrades().isEmpty()) {
             int count = 0;
             for (String upgrade : player.getUpgrades()) {
-                Texture upgradesTexture = new Texture(Gdx.files.internal("assets/upgrades/" + upgrade.toLowerCase() + ".png"));
+                Texture upgradesTexture = new Texture(Gdx.files.internal("upgrades/" + upgrade.toLowerCase() + ".png"));
 
                 TextureRegionDrawable resizedTexture = new TextureRegionDrawable(
                         new TextureRegion(upgradesTexture, 0, 0, upgradesTexture.getWidth(), upgradesTexture.getHeight()));
@@ -533,7 +526,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 sellWindow.remove();
                 isSellWindowOpen = false;
                 System.out.println("CLOSED SELL WINDOW");
-                buttonClick.play();
+                buttonClick.play(0.2f);
             }
         });
 
@@ -570,7 +563,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                         player.setCoins(fish.getPrice());
                         player.removeItem(fish);
                         updateCoinsLabel(coins);
-                        buttonClick.play();
+                        buttonClick.play(0.2f);
                     }
                 });
             }
@@ -633,7 +626,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 fishingInstruction.remove();
-                buttonClick.play();
+                buttonClick.play(0.2f);
             }
         });
 
@@ -651,7 +644,8 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 pondKey = true;
                 riverKey = true;
                 
-                Map<String, Fish> fishes = FishParser.parseFishJson("core/src/com/mygdx/quest/utils/fish.json");
+                FileHandle fishFile = Gdx.files.internal("fish.json");
+                Map<String, Fish> fishes = FishParser.parseFishJson(fishFile);
 
 
                 if (!isFishingWindowOpen) {
@@ -709,7 +703,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                                 public void clicked(InputEvent event, float x, float y) {
                                     popup.remove();
                                     isPopupOpen = false;
-                                    buttonClick.play();
+                                    buttonClick.play(0.2f);
                                 }
                             });
                             Label label = new Label("Inventory is full! Sell some items first", skin);
@@ -752,7 +746,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
                         statisticsWindow.remove();
-                        buttonClick.play();
+                        buttonClick.play(0.2f);
                     }
                 });
                 statisticsWindow.add(closeButton).row();
@@ -773,7 +767,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 successWindow.remove();
-                buttonClick.play();
+                buttonClick.play(0.2f);
             }
         });
         Label descriptionLabel = new Label("\"" + fish.getDescription() + "\"", skin);
@@ -800,7 +794,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
     private void renderFailedWindow(Fish fish) {
 
         int coinDeduction = 0;
-        if (totalTimesFished < 5) {
+        if (totalTimesFished <= 3) {
             coinDeduction = 0;
         } else {
             switch (fish.getRarity()) {
@@ -816,7 +810,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             }
         }
 
-        if (totalTimePlayed < 3) {
+        if (totalTimesFished > 3) {
             if (player.getCoins() <= 0) {
                 isFailedWindowOpen = true;
                 // Game over condition
@@ -829,7 +823,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                         // Reset the game state or go back to the main menu
                         System.out.println("GAME OVER");
                         isFailedWindowOpen = false;
-                        buttonClick.play();
+                        buttonClick.play(0.2f);
                         game.dispose();
                         game.create();
                         game.setScreen(new LoadingScreen(game));
@@ -853,7 +847,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     failedWindow.remove();
-                    buttonClick.play();
+                    buttonClick.play(0.2f);
                 }
             });
 
@@ -875,6 +869,23 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
             failedWindow.setPosition(game.widthScreen / 2 - failedWindow.getWidth() / 2, game.heightScreen / 2 - failedWindow.getHeight() / 2);
             uiStage.addActor(failedWindow);
         }
+    }
+
+    private void renderUpgradesDesc() {
+        upgradeDesc = new Window("Upgrade Stats:", skin);
+        String upgradeStatsString =
+        "Bait: +10 Bar Height" +
+        "\nBobber: +20 Bar Height" +
+        "\nHook: -10 Bar Speed" +
+        "\nFishing Line: -10 Bar Speed" +
+        "\nTackle Box: +5 Time Limit";
+        Label upgradeStats = new Label(upgradeStatsString, skin);
+
+        upgradeDesc.defaults().pad(10);
+        upgradeDesc.add(upgradeStats).row();
+        upgradeDesc.pack();
+        upgradeDesc.setPosition(game.widthScreen - 1270, game.heightScreen / 2 - shopWindow.getHeight() / 2);
+        uiStage.addActor(upgradeDesc);
     }
 
     @Override

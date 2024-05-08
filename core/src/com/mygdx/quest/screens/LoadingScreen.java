@@ -23,10 +23,10 @@ public class LoadingScreen extends ScreenAdapter {
     }
 
     private void queueAssets() {
-        game.assets.load("assets/images/anglers-quest-header.png", Texture.class);
-        game.assets.load("assets/skins/old-skins/quest-skin.atlas", TextureAtlas.class);
-        game.assets.load("assets/images/background.png", Texture.class);
-        game.assets.load("assets/images/underwater.png", Texture.class);
+        game.assets.load("images\\anglers-quest-header.png", Texture.class);
+        game.assets.load("skins\\old-skins\\quest-skin.atlas", TextureAtlas.class);
+        game.assets.load("images\\background.png", Texture.class);
+        game.assets.load("images\\underwater.png", Texture.class);
     }
 
     @Override
@@ -56,18 +56,29 @@ public class LoadingScreen extends ScreenAdapter {
 
         shapeRenderer.begin(ShapeType.Filled);
 
+        // shapeRenderer.setColor(Color.FOREST);
+        // shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, game.camera.viewportWidth - 64, 16);
+
+        // shapeRenderer.setColor(Color.WHITE);
+        // shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
+        // shapeRenderer.end();
+
+        float rectWidth = game.camera.viewportWidth / 2;
+        float rectHeight = 16;
+        float centerX = (game.camera.viewportWidth - rectWidth) / 2;
+        float rectY = game.camera.viewportHeight / 2;
+
         shapeRenderer.setColor(Color.FOREST);
-        shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, game.camera.viewportWidth - 64, 16);
+        shapeRenderer.rect(centerX, rectY, rectWidth, rectHeight);
 
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
+        shapeRenderer.rect(centerX, rectY, progress * rectWidth, rectHeight);
         shapeRenderer.end();
     }
 
     @Override
     public void resize(int width, int height) {
-        game.camera.viewportWidth = width;
-        game.camera.viewportHeight = height;
+        
     }
 
     @Override

@@ -726,14 +726,17 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
                 System.out.println("Detected player-tent collision");
                 tentKey = true;
                 
+                FileHandle fishFile = Gdx.files.internal("fish.json");
+                Map<String, Fish> fishes = FishParser.parseFishJson(fishFile);
+
                 Window statisticsWindow = new Window("Statistics", skin);
                 statisticsWindow.defaults().pad(10);
 
-                Label timePlayed = new Label("Time Played: " + totalTimePlayed + " seconds", skin);
+                Label timePlayed = new Label("Time Played: " + String.format("%.0f", totalTimePlayed / 60) + " minutes", skin);
                 Label timesFished = new Label("Number of Times Fished: " + totalTimesFished, skin);
                 Label fishCaught = new Label("Fish Caught: " + this.fishCaught.size(), skin);
-                Label fishDiscovered = new Label("Fish Discovered: " + this.fishDiscovered.size(), skin);
-                Label upgradesCollected = new Label("Upgrades/Collectibles Found: " + this.upgradesCollected.size(), skin);
+                Label fishDiscovered = new Label("Fish Discovered: " + this.fishDiscovered.size() + "/" + fishes.size(), skin);
+                Label upgradesCollected = new Label("Upgrades/Collectibles Found: " + this.upgradesCollected.size() + "/" + upgrades.size(), skin);
 
                 statisticsWindow.add(timePlayed).row();
                 statisticsWindow.add(timesFished).row();
@@ -884,7 +887,7 @@ public class GameScreen extends ManagedScreenAdapter implements FishingScreen.Fi
         upgradeDesc.defaults().pad(10);
         upgradeDesc.add(upgradeStats).row();
         upgradeDesc.pack();
-        upgradeDesc.setPosition(game.widthScreen - 1270, game.heightScreen / 2 - shopWindow.getHeight() / 2);
+        upgradeDesc.setPosition((game.widthScreen / 2 - upgradeDesc.getWidth() / 2) - shopWindow.getWidth() * 2.5f, game.heightScreen / 2 - upgradeDesc.getHeight() / 2);
         uiStage.addActor(upgradeDesc);
     }
 
